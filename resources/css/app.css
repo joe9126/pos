@@ -1,0 +1,49 @@
+.card{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    padding: 1em 1em;
+}
+
+input[type=text]{
+    padding: 5px !important;
+}
+
+ul{
+    list-style: none;
+}
+.loginform{
+    width: 25em;
+    max-width: 30em;
+    padding: 2em 1em;
+}
+
+#profileicon:hover{
+    cursor: pointer;
+}
+
+#profile{
+  
+   margin-top: 20px;
+    z-index: 10;
+    width: 50px;
+}
+.item-category ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.item-category ul li{
+    float: left;
+}
+.item-category li a {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    padding: 0.5em;
+    background-color: black;
+    margin-right: 0.5em;
+    border-radius: 5px;
+  }
