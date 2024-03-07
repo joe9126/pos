@@ -17,8 +17,9 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
-    @vite(['resources/sass/app.scss','resources/css/app.css', 'resources/js/app.js', 'resources/js/sidebar.js'])
+    @vite(['resources/sass/app.scss','resources/css/app.css', 'resources/js/app.js', 'resources/js/sidebar.js','resources/js/scripts.js'])
 </head>
 <body id="body-pd">
     <div id="app">

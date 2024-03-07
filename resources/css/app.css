@@ -47,3 +47,81 @@ ul{
     margin-right: 0.5em;
     border-radius: 5px;
   }
+
+  hr{
+    
+    border: 1px;
+    border-top: 1px solid rgba(15, 12, 199, 0.877);
+  }
+
+  .item-tile{
+    border: 1px solid rgb(143, 143, 150);
+    width: 10rem;
+    height: auto;
+    padding-left: 2px;
+    padding-right: 2px;
+    max-height: 14rem;
+    border-radius: 5px;
+    margin-right: 5px;
+    font-size: 1rem;
+    text-align: center;
+    transition: 452ms;
+  }
+  .item-tile:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+  .item_link{
+    text-decoration: none;
+    color: #023;
+  }
+  .item-txt{
+    text-align: center;
+    font-size: 0.8rem;
+    
+  }
+  #products_list{
+    flex-wrap: wrap;
+  }
+  #prod_image{
+    width: 50px;
+    height: auto;
+  }
+  .item_cat{
+    background-color: #0d6efd;
+    font-size: 0.8em;
+    color: #fff;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 5px;
+  }
+  .item_title{
+    font-size: 0.8em;
+    white-space: nowrap;
+    overflow: hidden;
+   text-overflow:ellipsis;
+  }
+
+  .positem_remove:hover{
+    color: red;
+  }
+
+  .pos_cost_table{
+   
+    border-collapse: collapse;
+  }
+
+  .pos_table tbody tr td{
+   font-size: 1rem;
+  }
+  #pos_cost_table, table, tbody, tr, td{
+   
+   padding-left: 15px;
+  }
+
+  .pos_list{
+    height: auto;
+    min-height: 40vh;
+    border: 1px solid #c7c7c7;
+    border-radius: 5px;
+  }

@@ -24,4 +24,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware('auth')->group(function(){
     Route::get('pos',[POSController::class,'index'])->name('pos');
+    Route::get('pos/{id}',[POSController::class,'show'])->name('pos.show');
+    Route::post('pos/transact',[POSController::class,'store'])->name('pos.store');
+    Route::get('pos/search/{phrase}',[POSController::class,'search'])->name('pos.search');
 });
