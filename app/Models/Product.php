@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Taxgroup;
 use App\Models\Transaction;
+use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Product extends Model
 {
@@ -20,7 +21,7 @@ class Product extends Model
 
 
     protected $fillable = [
-        'sku','title','category_id','quantity','image','unit_price','discount','tax_id','status','stock_notice'
+        'sku','title','category_id','quantity','image','unit_price','discount','tax_id','status','stock_notice','rating'
     ];
 
       /**
@@ -31,16 +32,23 @@ class Product extends Model
     }
 
     /**
-     * One product belongs to one tax group
+     * One product belongs to one taxgroup
      */
-    public function taxgroup(): BelongsTo{
-        return $this->belongsTo(Taxgroup::class);
+    public function tax(): BelongsTo{
+        return $this->belongsTo(Tax::class);
     }
 
     /**
-     * One product belongs to many transactions
+     * A product has many transactions
      */
     public function transaction():BelongsToMany{
         return $this->belongsToMany(Transaction::class);
+    }
+
+     /**
+     * A product has many Suppliers
+     */
+    public function supplier():BelongsToMany{
+        return $this->belongsToMany(Supplier::class);
     }
 }

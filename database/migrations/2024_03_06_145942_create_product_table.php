@@ -16,13 +16,14 @@ return new class extends Migration
             $table->string('sku');
             $table->string('title');
             $table->string('category_id');
-            $table->integer('quantity');
-            $table->string('image');
+            $table->integer('quantity')->default(0);
+            $table->string('image')->nullable();
             $table->float('unit_price');
-            $table->float('discount');
+            $table->float('discount')->default(0);
             $table->string('tax_id');
-            $table->string('status');
+            $table->boolean('status')->default(true);
             $table->integer('stock_notice');
+            $table->string('rating')->default(0);
             $table->timestamps();
         });
     }

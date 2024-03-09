@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Taxgroup;
+use App\Models\Tax;
 use App\Models\Transaction;
 use App\Models\Product_transaction;
 
@@ -14,9 +14,9 @@ class POSController extends Controller
 {
     
     public function index(Category $category){
-       $products = Product::all();
+       $products = Product::where('rating','>=',3)->limit(10)->get();
        $categories = Category::all();
-       $taxgroups = Taxgroup::where('status',1)->get();
+       $taxgroups = Tax::where('status',1)->get();
         return view('pos.pos',compact(['products','categories','taxgroups']));
     }
 

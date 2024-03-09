@@ -23,12 +23,13 @@ class ProductFactory extends Factory
            'title'=>$this->faker->sentence(3),
            'category_id'=>$this->faker->numberBetween(1,5),
            'quantity'=>$this->faker->numberBetween(20,100),
-           'image'=>$this->faker->url(),
+           'image'=>'box.png',
            'unit_price'=>$this->faker->randomNumber(3),
            'discount'=>$this->faker->randomNumber(2),
-           'tax_id'=>'KE',
+           'tax_id'=>$this->faker->numberBetween(1,3),
            'status'=>$this->faker->boolean(),
-           'stock_notice'=>$this->faker->randomNumber(2)
+           'stock_notice'=>$this->faker->randomNumber(2),
+           'rating'=>$this->faker->numberBetween(1,5)
         ];
     }
 }

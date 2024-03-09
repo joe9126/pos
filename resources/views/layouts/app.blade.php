@@ -18,12 +18,13 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.js" integrity="sha512-Fq/wHuMI7AraoOK+juE5oYILKvSPe6GC5ZWZnvpOO/ZPdtyA29n+a5kVLP4XaLyDy9D1IBPYzdFycO33Ijd0Pg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    @vite(['resources/sass/app.scss','resources/css/app.css', 'resources/js/app.js', 'resources/js/sidebar.js','resources/js/scripts.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body id="body-pd">
     <div id="app">
-        <main class="py-4">
+        <main class="py-4" id="main">
             @yield('content')
             @auth
             @include('layouts.sidenav')

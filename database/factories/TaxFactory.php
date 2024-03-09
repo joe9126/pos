@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Taxgroup;
+use App\Models\Tax;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class TaxgroupFactory extends Factory
+class TaxFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,7 +16,7 @@ class TaxgroupFactory extends Factory
      * @return array<string, mixed>
      */
 
-     protected $model = Taxgroup::class;
+     protected $model = Tax::class;
     public function definition(): array
     {
         return [

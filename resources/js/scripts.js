@@ -18,9 +18,15 @@ $(function(){
             url:link,
             success:function(data){
                // console.log(data);
+               if(data.quantity<1){
+                $("#statusalert").addClass("alert-danger");
+                $("#statusalert").removeClass("alert-success");
+                $("#msg").text("Units not enough.");
+                $("#statusalert").show().fadeOut(4000);
+            }else{
                let item = 
                "<tr>"+
-               "<td>"+data.id+"</td>"+
+               "<td class='prodID'>"+data.id+"</td>"+
                "<td>"+data.title+"</td>"+
                 "<td>"+
                            "<a href='#' class='addunit'><i class='fa-solid fa-circle-plus text-success'></i></a>"+ 
@@ -52,21 +58,20 @@ $(function(){
                    match = $(this).index();                   
                     return true;
                 }
-              
            });
          
           if(match>-1){
             
-            var itemqty = parseInt($("table#pos_table >tbody >tr:nth-child("+(match+1)+") td:nth-child(4)").text()) + 1;
+                var itemqty = parseInt($("table#pos_table >tbody >tr:nth-child("+(match+1)+") td:nth-child(4)").text()) + 1;
   
-            $("#pos_table tbody tr:nth-child("+(parseInt(match+1))+") td:nth-child(4)").text(itemqty);
-         }else{
+                $("#pos_table tbody tr:nth-child("+(parseInt(match+1))+") td:nth-child(4)").text(itemqty);
+            }else{
               $("#pos_table").find('tbody').append(item);
-           }
-        }
-          
-            getSalestotal();
-
+                    }
+                }
+           
+        getSalestotal();
+             }
             }
         });
     });
@@ -108,13 +113,34 @@ function getSalestotal(){
 }
 
 /**
- * Add item units
+ * Add item units on POS list
  */
-$("#items_tbody").on('click',".addunit",function(event){
+$("table#pos_table #items_tbody").on('click',".addunit",function(event){
         event.preventDefault();
-        var units  = $(this).closest('td').next('td').html();
-        $(this).closest('td').next('td').html(parseInt(units)+1);
-        getSalestotal();
+        var units  = parseInt($(this).closest('td').next('td').html());
+        var id = $(this).closest('tr').find('td:nth-child(1)').text();
+        var stockqty = 0;
+        
+        $.ajax({
+            url:"pos/"+id,
+            type:"get",
+            success:(data)=>{
+                stockqty = data.quantity;
+                if(parseInt(stockqty)>units){
+                    var qty = parseInt(units)+1;
+                    $(this).closest('td').next('td').html(qty);                    
+                    getSalestotal();
+                }else{
+                    $("#statusalert").addClass("alert-danger");
+                    $("#statusalert").removeClass("alert-success");
+                    $("#msg").text("Units not enough.");
+                    $("#statusalert").show().fadeOut(4000);;
+                }
+               
+            }
+        });       
+        
+       
 });
 
 /**
@@ -144,6 +170,16 @@ $("#items_tbody").on('click',".positem_remove",function(event){
 });
 
 /**
+ * clear POS list
+ */
+
+$("#clearposbtn").on('click',function(){
+    $("#pos_table tbody tr").remove();
+});
+
+
+
+/**
  * Transact POS
  */
 
@@ -168,7 +204,7 @@ $("#transactbtn").on("click",function(){
        });
        
        /**GET TRANSACTION TOTALS */
-      // var transaction_data = [];
+    
        var subtotal = parseFloat(numeral($("#pos_cost_table tbody tr:nth-child(1) td:nth-child(2)").text()).format('0.00'));
        var discount = parseFloat(numeral($("#pos_cost_table tbody tr:nth-child(2) td:nth-child(3)").text()).format('0.00'));
        var taxrate = parseFloat($("#pos_cost_table tbody tr:nth-child(3) td:nth-child(2)").text());
@@ -177,7 +213,7 @@ $("#transactbtn").on("click",function(){
        let transaction = {
                 subtotal:subtotal, discount:discount,taxrate:taxrate,grandtotal:grandtotal
             };
-      // transaction_data.push(transaction);
+     
            
             $.ajax({
                 method:'post',
@@ -215,7 +251,7 @@ $("#transactbtn").on("click",function(){
 
 
 /**
- * SEARCH PRODUCT
+ * SEARCH PRODUCT IN POS
  */
 
 $("#searchitem").on('change keyup paste',function(){
@@ -231,17 +267,35 @@ $("#searchitem").on('change keyup paste',function(){
         success:function(data){
            
             $(".item_link").hide();
+            var star_rating ="";
             data.forEach(element => {
+                var rating = element.rating;
+                            for(var i=1;i<=rating;i++){
+                                star_rating = '<span class = "fa fa-star checked"></span>';
+                            }
+                            for(var j=1;j<=(5-rating);+j++){
+                                star_rating += '<span class = "fa fa-star unchecked"></span>';
+                            }
+                            var prod_image ="";
+                    if(element.image){
+                        prod_image =  '<img id="prod_image" src="public_uploads/'+element.image+'" alt="Image" >'
+                    }
+                    else{
+                        prod_image =  '<img id="prod_image" src="public_uploads/box.png" alt="Image" >';
+                    }
                 var itemtile =  '<a href="pos/'+element.id+'" class="item_link">'+
                     '<div class="item-tile p-2 m-1">'+
                         '<div class="d-flex align-items-center justify-content-center" >'+
-                            '<img id="prod_image" src="assets/images/box.png" alt="Image" >'+
+                           prod_image+
                         '</div>'+
                        
                         '<h5 class="item_title">'+element.title+'</h5>'+
                         '<h6>'+element.quantity+' units left</h6>'+
                         '<span class="item_cat">'+element.category.title+'</span>'+
                         '<h5 class="item-txt fw-bold"> KES. '+element.unit_price+'</h5>'+
+                        '<div class="d-flex justify-content-center">'+
+                            '<span class="stars" data-rating="'+element.rating+'" data-num-stars="5" ></span>'+
+                        '</div>'+
                     '</div>'+
                 '</a>';
                 $("#products_list").append(itemtile);
@@ -250,4 +304,180 @@ $("#searchitem").on('change keyup paste',function(){
         }
     });
 }
+});
+
+
+/**
+ * Apply star rating to products view in POS
+ */
+$(document).ready(function(){
+    $(function() {
+        $('span.stars').stars();
+    });
+});
+
+
+
+/**
+ * Set Product Image background in Products
+ */
+$(document).ready(function(){
+    const filechooser = document.getElementById("image");
+    if(filechooser){
+        filechooser.addEventListener('change',readURL,true);
+    }
+
+function readURL(){
+    var file = document.getElementById("image").files[0];
+    var reader = new FileReader();
+    reader.onloadend = function(){
+        document.getElementById("productimage").style.backgroundImage = "url("+reader.result+")";
+    }
+    if(file){
+        reader.readAsDataURL(file);
+      }else{
+      }
+}});
+
+
+/**
+ * Search item by SKU in products page
+ */
+$("#sku").on("change paste keyup",function(){
+    var sku = $(this).val();
+    $.ajax({
+        method:"get",
+        url:"products/edit/"+sku,
+        dataType:"json",
+        success:function(data){
+            if(data.length !=0){
+                console.log(data);
+                $("#title").val(data[0].title);
+                $("select#category option:selected").val(data[0].category_id);
+                $("select#category option:selected").text(data[0].category.title);
+                $("#unitprice").val(data[0].unit_price);
+                $("#discount").val(data[0].discount);
+                $("select#tax_id option:selected").val(data[0].tax_id);
+                $("select#tax_id option:selected").text(data[0].tax.title);
+                $("#stock_notice").val(data[0].stock_notice);
+
+                $("select#status option:selected").val(data[0].status);
+                $("select#status option:selected").text(data[0].status ? "Active":"Locked");
+
+                $("select#rating option:selected").val(data[0].rating);
+                $("select#rating option:selected").text(data[0].rating+" Star");
+                $("#productimage").css('background-image','url(public_uploads/'+data[0].image+')');
+            }else{
+                //$("input[type='text']").not(this).val('');
+               // $("#product_form")[0].reset();
+            }
+           
+        }
+    });
+});
+
+
+/**
+ * Submit product form
+ */
+$(document).ready(function(){
+    $("#product_form").parsley();
+    $("#product_form").on('submit',function(event){
+       
+        event.preventDefault();
+        if($('#product_form').parsley().isValid()){
+            var formData = new FormData(this);
+           
+            $.ajax({
+                url:"products/store",
+                method:'post',
+                data:formData,
+                dataType:"json",
+                contentType:false,
+                processData:false,
+                beforeSend:function(){},
+                success:function(data){
+                                       
+                    if(data.status=="success"){
+                        $("#statusalert").removeClass("alert-danger");
+                        $("#statusalert").addClass("alert-success");
+                        $('#product_form')[0].reset();
+                        $('#product_form').parsley().reset();
+                        $("#productimage").css('background-image','url(public_uploads/box.png)');
+                    }else{
+                        $("#statusalert").addClass("alert-danger");
+                        $("#statusalert").removeClass("alert-success");
+                    }
+                    $("#msg").text(data.message);
+                     $("#statusalert").show().fadeOut(4000);
+                    
+                }
+            });
+        }
+    });
+});
+
+/**
+ * Stock addition search
+ */
+$("#search_item").on('change keyup paste',function(){
+    var sku = $(this).val();
+    $.ajax({
+        method:"get",
+        url:"products/edit/"+sku,
+        dataType:"json",
+        success:function(data){
+            if(data.length>0){
+                $("#stock_sku").val(data[0].sku);
+                $("#stock_title").val(data[0].title);
+            }
+        }
+    });
+});
+
+
+
+/**
+ * Submit Add Stock form
+ */
+$(document).ready(function(){
+    $("#addstockform").parsley();
+
+    $("#addstockform").on('submit',function(event){
+        event.preventDefault();
+        var formData = new FormData(this);
+        if($("#addstockform").parsley().isValid()){
+        
+          $.ajax({
+                 url:"products/update",
+                 method:'post',
+                 data:formData,
+                 dataType:"json",
+                 contentType:false,
+                 processData:false,
+                 contentType:false,
+                processData:false,
+                beforeSend:function(){
+                    $("#msg2").text("Updating. Please wait...");
+                    $("#alert").removeClass("alert-danger");
+                    $("#alert").addClass("alert-primary");
+                     $("#alert").show();
+                },
+                success:function(data){
+                //console.log(data);
+                if(data.status=="success"){
+                    $("#alert").removeClass("alert-danger");
+                    $("#alert").addClass("alert-success");
+                    $("#addstockform")[0].reset();
+                    $("#addstockform").parsley().reset();
+                   
+                }else{
+                    $("#alert").addClass("alert-danger");
+                    $("#alert").removeClass("alert-success");
+                }
+                    $("#msg2").text(data.message);
+                     $("#alert").show().fadeOut(4000);;
+            }});
+        }
+    });
 });

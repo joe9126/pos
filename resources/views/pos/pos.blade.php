@@ -1,6 +1,7 @@
 @extends('layouts.app')
-@section('title') Point of Sale @endsection
+@section('title')- Point of Sale @endsection
 @section('content')
+<div class="container-fluid">
 <div class="row">
     <div class="col-md-7 card">
         
@@ -24,13 +25,22 @@
                 <a href="pos/{{$product->id}}" class="item_link">
                     <div class="item-tile p-2 m-1">
                         <div class="d-flex align-items-center justify-content-center" >
-                            <img id="prod_image" src="assets/images/box.png" alt="Image" >
+                            @if ($product->image==null||$product->image=="")
+                             <img id="prod_image" src="public_uploads/box.png" alt="Image" >
+                            @else
+                             <img id="prod_image" src="public_uploads/{{$product->image}}" alt="Image" >
+                            @endif
+                           
                         </div>
                        
                         <h5 class="item_title">{{$product->title}}</h5>
                         <h6>{{$product->quantity}} units left</h6>
                         <span class="item_cat">{{$product->category->title}}</span>
                         <h5 class="item-txt fw-bold"> KES. {{$product->unit_price}}</h5>
+                        <div class="d-flex justify-content-center">
+                            <span class="stars" data-rating="{{$product->rating}}" data-num-stars="5" ></span>
+                        </div>
+                       
                     </div>
                 </a>
                 @endforeach
@@ -83,9 +93,10 @@
             </table>
             <div class="d-flex flex-row justify-content-between mt-3">
                 <button type="button" id="transactbtn" class="btn btn-primary w-50 m-2">Transact</button>
-                <button type="button" class="btn btn-danger w-50 m-2">Clear</button>
+                <button type="button" id="clearposbtn" class="btn btn-danger w-50 m-2">Clear</button>
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection

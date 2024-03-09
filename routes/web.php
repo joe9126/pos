@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\POSController;
-
+use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,4 +27,11 @@ Route::middleware('auth')->group(function(){
     Route::get('pos/{id}',[POSController::class,'show'])->name('pos.show');
     Route::post('pos/transact',[POSController::class,'store'])->name('pos.store');
     Route::get('pos/search/{phrase}',[POSController::class,'search'])->name('pos.search');
+
+    Route::get('products',[ProductController::class,'index'])->name('products');
+    Route::post('products/store',[ProductController::class,'store'])->name('products.store');
+    Route::get('products/edit/{sku}',[ProductController::class,'edit'])->name('products.edit');
+    Route::post('products/update',[ProductController::class,'update'])->name('products.update');
+
+    Route::get('suppliers',[SupplierController::class,'create'])->name('suppliers.create');
 });
