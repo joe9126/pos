@@ -5,3 +5,5 @@ import './jQuery.rating';
 
 import './sidebar';
 import './scripts';
+
+import './tabscript';

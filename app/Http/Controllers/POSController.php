@@ -31,7 +31,7 @@ class POSController extends Controller
        $prod_transact = $request->get('sale_data');
        $transaction_data  = $request->get('transaction');
 
-       $transaction_data['soldby'] = Auth::user()->id;
+       $transaction_data['user_id'] = Auth::user()->id;
 
         $transaction = Transaction::create($transaction_data);
         $transactionID = $transaction->id;
@@ -79,20 +79,5 @@ class POSController extends Controller
        
     }
 
-    /**
-     * Search by phrase
-     */
-
-     public function search($keyword){
-       $data = Product::where('id','like','%'.$keyword.'%')
-                ->orWhere('title','like','%'.$keyword.'%')
-                ->orWhere('sku','like','%'.$keyword.'%')
-                ->with('category') 
-                ->get();
-
-        if($keyword ==null||$keyword==''){
-            $data = Product::all()->with('category')->get();
-        }
-        return response()->json($data);
-     }
+   
 }

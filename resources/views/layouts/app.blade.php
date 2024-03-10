@@ -24,7 +24,7 @@
 </head>
 <body id="body-pd">
     <div id="app">
-        <main class="py-4" id="main">
+        <main class="py-2" id="main">
             @yield('content')
             @auth
             @include('layouts.sidenav')

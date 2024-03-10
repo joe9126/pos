@@ -15,7 +15,7 @@
                 <span class="nav_logo-name"> {{ config('app.name', 'POS') }}</span> 
             </a>
             <div class="nav_list" id="nav_list"> 
-                <a href="{{ url('dashboard') }}" class="nav_link active"> 
+                <a href="{{ url('dashboard') }}" class="nav_link"> 
                     <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span> 
                 </a> 
                 <a href="{{ url('pos') }}" class="nav_link"> 
@@ -25,7 +25,7 @@
                     <i class='bx bx-package nav_icon'></i> <span class="nav_name">Products</span>
                  </a>
 
-                 <a href="#" class="nav_link"> 
+                 <a href="{{ url('sales') }}" class="nav_link"> 
                     <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Sales</span>
                  </a> 
                 

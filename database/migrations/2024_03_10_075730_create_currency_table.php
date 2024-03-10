@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('currency', function (Blueprint $table) {
             $table->id();
-            $table->float('subtotal');
-            $table->float('taxrate');
-            $table->float('discount');
-            $table->float('grandtotal');
-            $table->float('payment');
-            $table->string('payment_mode')->default("Cash");
-            $table->string('user_id');
+            $table->string('title');
+            $table->string('code');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaction');
+        Schema::dropIfExists('currency');
     }
 };

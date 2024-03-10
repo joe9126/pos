@@ -51,4 +51,16 @@ class Product extends Model
     public function supplier():BelongsToMany{
         return $this->belongsToMany(Supplier::class);
     }
+
+    // Scope to search products by title, SKU, or category
+    public function scopeSearch($query, $keyword)
+    {
+        return $query->where(function ($query) use ($keyword) {
+            $query->where('title', 'like', "%".$keyword."%")
+                  ->orWhere('sku', $keyword)
+                  ->orWhereHas('category', function ($query) use ($keyword) {
+                      $query->where('title', $keyword);
+                  });
+        });
+    }
 }
