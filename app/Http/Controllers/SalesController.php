@@ -9,7 +9,7 @@ use App\Models\Transaction;
 class SalesController extends Controller
 {
     public function create(){
-        $transactions = Transaction::all();
+        $transactions = Transaction::latest('created_at')->take(10)->get();
         return view('sales.sales',compact(['transactions']));
     }
 

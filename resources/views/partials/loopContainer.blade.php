@@ -31,7 +31,7 @@
             <hr>
         </div>
         <div class="d-flex flex-row justify-content-between">
-            <button class="btn btn-primary mt-2">
+            <button class="btn btn-primary mt-2" id="print-receipt-btn">
                 <i class="fa-solid fa-print"></i> Print Receipt
             </button>
         </div>

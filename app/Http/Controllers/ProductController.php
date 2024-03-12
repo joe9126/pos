@@ -33,12 +33,13 @@ class ProductController extends Controller
         $status = 0;  $filename ="box.png";
 
         if($request->hasFile('image')){
-            $product = Product::where('sku',$prod_data['sku'])->first();
+            $product = Product::where('sku',$prod_data['sku'])->get();
             $file = $request->file('image');
             $filename = time().$file->getClientOriginalName();
             $file->move(public_path('/public_uploads'),$filename);
             if($product){
-                Product::update(['image',$filename]);
+                Product::where('sku',$prod_data['sku'])
+                        ->update(['image'=>$filename]);
             }           
         }
         

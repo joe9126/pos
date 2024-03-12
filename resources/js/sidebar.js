@@ -1,3 +1,50 @@
+
+ 
+$(document).ready(function(){
+    var element = document.getElementById("profileicon");
+    element.onclick = function(){
+     //alert("clicked");
+     var profmenu = document.getElementById('profile');
+     if(profmenu.style.display == "none"){
+         profmenu.style.display == "block";
+         alert("clicked");
+     }else{
+         profmenu.style.display == "none";
+         alert("hidden");
+     }
+ }
+});
+ 
+
+$(document).ready(function(){
+    var pagetitle = document.title;
+   
+var delimeter = " - ";
+const substring = pagetitle.split(delimeter);
+const substringAfter = substring[1].trim();
+document.getElementById('page_title').innerHTML = substringAfter;
+});
+
+
+
+/**
+ * Load pages without refresh
+ */
+
+$(document).ready(function(){
+    $(function(){
+        $("#nav_list >a").on('click',function(event){
+            event.preventDefault();
+            var newurl = $(this).attr('href');
+          
+            $("#main").load(this.href,function(){
+                window.location = newurl;
+            });
+        });
+    });
+});
+
+
 document.addEventListener("DOMContentLoaded", function(event) {
    
     const showNavbar = (toggleId, navId, bodyId, headerId) =>{
@@ -37,46 +84,3 @@ document.addEventListener("DOMContentLoaded", function(event) {
      // Your code to run since DOM is loaded and ready
     });
 
-
- 
-
-   var element = document.getElementById("profileicon");
-   element.onclick = function(){
-    //alert("clicked");
-    var profmenu = document.getElementById('profile');
-    if(profmenu.style.display == "none"){
-        profmenu.style.display == "block";
-        alert("clicked");
-    }else{
-        profmenu.style.display == "none";
-        alert("hidden");
-    }
-}
-
-$(document).ready(function(){
-    var pagetitle = document.title;
-   
-var delimeter = " - ";
-const substring = pagetitle.split(delimeter);
-const substringAfter = substring[1].trim();
-document.getElementById('page_title').innerHTML = substringAfter;
-});
-
-
-
-/**
- * Load pages without refresh
- */
-
-$(document).ready(function(){
-    $(function(){
-        $("#nav_list >a").on('click',function(event){
-            event.preventDefault();
-            var newurl = $(this).attr('href');
-          
-            $("#main").load(this.href,function(){
-                window.location = newurl;
-            });
-        });
-    });
-});

@@ -13,49 +13,52 @@
                     <ul>
                         <li><a href="#" class="bg-primary text-white category_search">All</a></li>
                         @foreach ($categories as $category)
-                            <li><a href="#" class="bg-primary text-white category_search">{{ $category->title }}</a></li>
+                            <li><a href="#" class="bg-primary text-white category_search">{{ $category->title }}</a>
+                            </li>
                         @endforeach
 
                     </ul>
                 </div>
                 <div class="items-list">
 
-                    <div class="d-flex flex-colum">
+                    <div class="d-flex flex-colum mb-2">
                         <input type="text" class="form-control" name="searchitem" id="searchitem"
                             placeholder="Search item" autocomplete="off">
                     </div>
                     <hr>
                     <div class="" id="products_list">
                         <div class="d-flex flex-row flex-wrap align-items-start justify-content-center itemslist">
-                          @foreach ($products as $product)
-                            <a href="pos/{{ $product->id }}" class="item_link">
-                                <div class="item-tile p-2 m-1">
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        @if ($product->image == null || $product->image == '')
-                                            <img id="prod_image" src="public_uploads/box.png" alt="Image">
-                                        @else
-                                            <img id="prod_image" src="public_uploads/{{ $product->image }}" alt="Image">
-                                        @endif
+                            @foreach ($products as $product)
+                                <a href="pos/{{ $product->id }}" class="item_link">
+                                    <div class="item-tile p-2 m-1">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            @if ($product->image == null || $product->image == '')
+                                                <img id="prod_image" src="public_uploads/box.png" alt="Image">
+                                            @else
+                                                <img id="prod_image" src="public_uploads/{{ $product->image }}"
+                                                    alt="Image">
+                                            @endif
+
+                                        </div>
+
+                                        <h5 class="item_title">{{ $product->title }}</h5>
+                                        <h6>{{ $product->quantity }} units left</h6>
+                                        <span class="item_cat">{{ $product->category->title }}</span>
+                                        <h5 class="item-txt fw-bold"> KES. {{ $product->unit_price }}</h5>
+                                        <div class="d-flex justify-content-center">
+                                            <span class="stars" data-rating="{{ $product->rating }}"
+                                                data-num-stars="5"></span>
+                                        </div>
 
                                     </div>
-
-                                    <h5 class="item_title">{{ $product->title }}</h5>
-                                    <h6>{{ $product->quantity }} units left</h6>
-                                    <span class="item_cat">{{ $product->category->title }}</span>
-                                    <h5 class="item-txt fw-bold"> KES. {{ $product->unit_price }}</h5>
-                                    <div class="d-flex justify-content-center">
-                                        <span class="stars" data-rating="{{ $product->rating }}" data-num-stars="5"></span>
-                                    </div>
-
-                                </div>
-                            </a>
-                        @endforeach
-                     </div>
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
                     <div id="searchresultview" class="itemslist">
                         <!-- Product search results loaded dynamically via posproductsviewblade-->
-                       
-                     </div>
+
+                    </div>
 
                 </div>
 
@@ -63,11 +66,12 @@
             <div class="col-md-5 vh-75" id="pos_trans_view">
                 <!-- POS view -->
                 <div class="card">
-                    <h4>POS</h4><hr>
+                    <h4>POS</h4>
+                    <hr>
                     <div class="d-flex justify-content-center">
                         <div class="alert alert-danger alert-block statusmsg w-75 ml-4" style="display: none;"
                             id="statusalert">
-                            <strong> <span id="msg" class="alert-msg" style="font-size:0.8rem"></span>Test message</strong>
+                            <strong> <span id="msg" class="alert-msg" style="font-size:0.8rem"></span></strong>
                         </div>
                     </div>
 

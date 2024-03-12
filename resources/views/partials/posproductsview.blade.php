@@ -14,8 +14,8 @@
                 <h5 class="item_title">{{ $product->title }}</h5>
                 <h6>{{ $product->quantity }} units left</h6>
                 <span class="item_cat">{{ $product->category->title }}</span>
-                <h5 class="item-txt fw-bold"> KES. {{ $product->unit_price }}</h5>
-                <div class="d-flex justify-content-center">
+                <h5 class="item-txt fw-bold"> KES. {{number_format($product->unit_price,2) }}</h5>
+                <div class="d-flex justify-content-center star-container">
                     <span class="stars" data-rating="{{ $product->rating }}" data-num-stars="5"></span>
                 </div>
 

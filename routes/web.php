@@ -17,7 +17,7 @@ use App\Http\Controllers\PartialsController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
@@ -39,4 +39,6 @@ Route::middleware('auth')->group(function(){
 
     Route::get('sales',[SalesController::class,'create'])->name('sales.create');
     Route::get('sales/transaction/{id}',[PartialsController::class,'create'])->name('sales.transaction');
+
+    Route::get('sales/receipt/{id}',[PartialsController::class,'load_receipt'])->name('sales.receipt');
 });

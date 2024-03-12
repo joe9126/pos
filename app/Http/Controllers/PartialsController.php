@@ -33,4 +33,12 @@ class PartialsController extends Controller
        
       }
 
+      /**
+       * Load POS receipt
+       */
+
+       public function load_receipt($transaction_id){
+            $transaction_data = Transaction::with('product','user')->find($transaction_id);
+            return view('partials.receipt',compact(['transaction_data']));
+       }
 }

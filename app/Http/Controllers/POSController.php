@@ -55,7 +55,7 @@ class POSController extends Controller
                 return response()->json(['status'=>'error','message'=>'Failed to save transaction!'],500);
             }
         }
-       return response()->json(['status'=>'success','message'=>'Transaction Completed Successfully'],200);
+       return response()->json(['status'=>'success','message'=>'Transaction Completed Successfully',"transaction_id"=>$transactionID],200);
       
     }
 

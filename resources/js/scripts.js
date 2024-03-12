@@ -5,6 +5,11 @@ $.ajaxSetup({
 });
 
 
+$(".login-control").on("change keyup paste", function () {
+    $(".login-control").val() ? $("#loginbtn").prop('disabled', false) : $("#loginbtn").prop('disabled', true);
+});
+
+
 /**
  * Add item to POS list
  */
@@ -23,7 +28,7 @@ $(function () {
                     $("#statusalert").addClass("alert-danger");
                     $("#statusalert").removeClass("alert-success");
                     $("#msg").text("Units not enough.");
-                   
+
                 } else {
                     $("#statusalert").addClass("alert-success");
                     $("#statusalert").removeClass("alert-danger");
@@ -274,6 +279,9 @@ $("#executebtn").on('click', function (event) {
                 $("#cashtotal").text('0.00');
                 $("#cashbalance").text('0.00');
                 $("#executebtn").prop('disabled', true);
+
+                printReceipt(data.transaction_id);
+                
                 setTimeout(function () {
                     $(".alert").slideUp('slow').fadeOut(function () {
                         $("#pos_table tbody tr").remove();
@@ -314,21 +322,21 @@ $("#searchitem").on('change keyup paste', function () {
 /**
  * Category search button
  */
-$(".category_search").on("click",function(event){
+$(".category_search").on("click", function (event) {
     event.preventDefault();
     var category = $(this).text();
-   // alert(category);
-   $.ajax({
-    method: "get",
-    url: "pos/search/" + category,
-    dataType: "html",
-    success: (data) => {
-        var star_rating = "";
-        $("#products_list").hide();
-        $("#searchresultview").show();
-        data ? $("#searchresultview").html(data) : $("#searchresultview").html(msg);
-    }
-});
+    // alert(category);
+    $.ajax({
+        method: "get",
+        url: "pos/search/" + category,
+        dataType: "html",
+        success: (data) => {
+            var star_rating = "";
+            $("#products_list").hide();
+            $("#searchresultview").show();
+            data ? $("#searchresultview").html(data) : $("#searchresultview").html(msg);
+        }
+    });
 
 });
 
@@ -531,3 +539,53 @@ $("#transactions_table tbody tr").on('click', function (e) {
         }
     });
 });
+
+/**
+ * Print POS receipt 
+ */
+
+$("#trans_data").on('click', '#print-receipt-btn', function () {
+    //alert("printed");
+    var str = $("#transaction_id").text();
+    var transaction_id = str.substring(1);
+
+    printReceipt(transaction_id);
+});
+
+function printReceipt(transaction_id){
+    $.ajax({
+        url: "sales/receipt/" + transaction_id,
+        method: "get",
+        dataType: "html",
+        success: (data) => {
+    
+            var mywindow = window.open('', 'new div', 'height=600,width=800');
+            mywindow.document.title = "receipt no. "+transaction_id;
+            mywindow.document.write('<html><head><title></title>');
+            mywindow.document.write('<link rel="stylesheet" href="http://localhost:8000/assets/scss/receipt.scss" type="text/css" media="print"/>');
+            mywindow.document.write('</head><body onload="window.print();window.close()">');
+            mywindow.document.write(data);
+            mywindow.document.write('</body></html>');
+            mywindow.document.close();
+            mywindow.focus();
+            setTimeout(function () {
+                mywindow.print();
+            }, 5000);
+            //  mywindow.close();
+            return true;
+        }
+    });
+}
+
+
+
+/**
+ * Close modal.  When the user clicks anywhere outside of the modal, close it
+ */
+
+var modal = document.getElementById("main_modal");
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
