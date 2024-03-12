@@ -10,6 +10,29 @@ $(".login-control").on("change keyup paste", function () {
 });
 
 
+$(".item-tile").on("hover",function(){
+    $(".edit-prod").show();
+});
+
+/**
+ * Edit product item in Products list
+ */
+$(".prod_itemslist").on('click','.prod_item_link',function(event){
+    event.preventDefault();
+    
+    var prod_sku = $(this).attr('id');
+        $.ajax({
+        method:"get",
+        url:"products/show/"+prod_sku,
+        dataType:"html",
+        success:(data)=>{
+             $(".modal-content").html(data);
+             $(".modal-content").toggle( "bounce", { times: 3 }, "slow" );
+            $("#main_modal").show();
+        }
+    });
+    
+});
 /**
  * Add item to POS list
  */
@@ -428,9 +451,10 @@ $(document).ready(function () {
  */
 $("#sku").on("change paste keyup", function () {
     var sku = $(this).val();
+
     $.ajax({
         method: "get",
-        url: "products/edit/" + sku,
+        url: "products/edit/"+sku,
         dataType: "json",
         success: function (data) {
             if (data.length != 0) {
@@ -451,8 +475,17 @@ $("#sku").on("change paste keyup", function () {
                 $("select#rating option:selected").text(data[0].rating + " Star");
                 $("#productimage").css('background-image', 'url(public_uploads/' + data[0].image + ')');
             } else {
-                //$("input[type='text']").not(this).val('');
-                // $("#product_form")[0].reset();
+                $(".prod-input").val('');
+
+               /* $("select#status option:selected").text('Select Status');
+                $("select#tax_id option:selected").text('Select Tax Rate *');
+                $("select#rating option:selected").text("Select Rating");
+                $("select#category option:selected").text("Select Category *");*/
+                $(".prod-select option").each(function () {
+                    if (this.defaultSelected) {
+                        this.selected = true;
+                    }
+                });
             }
 
         }
@@ -465,7 +498,7 @@ $("#sku").on("change paste keyup", function () {
  */
 $(document).ready(function () {
     $("#product_form").parsley();
-    $("#product_form").on('submit', function (event) {
+    $(".modal-content").on('submit','#product_form', function (event) {
 
         event.preventDefault();
         if ($('#product_form').parsley().isValid()) {
@@ -570,7 +603,7 @@ $(document).ready(function () {
 /**
  * Transaction history table click
  */
-$("#transactions_table tbody tr").on('click', function (e) {
+$("#transactions_table ").on('click','tbody tr', function (e) {
     var str = $(this).find("td:nth-child(1)").text();
     var trans_id = str.substring(1);
     //alert(trans_id);
@@ -588,6 +621,102 @@ $("#transactions_table tbody tr").on('click', function (e) {
         }
     });
 });
+
+
+
+/**
+ * Fetch pending transaction by id
+ */
+
+$("#held_transactions_table").on("click",'tbody tr', function(event){
+    let str = $(this).find("td:nth-child(1)").text();
+    var trans_id = str.substring(1);
+    $.ajax({
+        url:"sales/transaction/"+trans_id,
+        method:"get",
+        dataType:"html",
+        success:(data)=>{
+            $("#print-receipt-btn").hide();
+            $(".card-info").show();
+            $("#held_trans_data").html(data);
+        }
+    });
+});
+
+/**
+ * Complete Held Transaction
+ */
+$("#held_trans_data").on('click','#complete-trans-btn', function(){
+    var str = $("#transaction_id").text()
+    var trans_id = str.substring(1);
+    $.ajax({
+        url:"sales/finalize/"+trans_id,
+        method:"post",
+        dataType:"json",
+        success:(data)=>{
+            printReceipt(trans_id);
+            $(".msg").text(data.message);
+            $(".alert").show();
+        }
+    });
+});
+
+/**
+ * delete pending transaction 
+ */
+$("#held_trans_data").on('click','#delete-trans-btn', function(){
+    var str = $("#transaction_id").text();
+    var trans_id = str.substring(1);
+    $.ajax({
+        url:"sales/delete/"+trans_id,
+        method:"post",
+        dataType:"json",
+        success:(data)=>{
+            printReceipt(trans_id);
+            $(".msg").text(data.message);
+            $(".alert").show().fadeOut(4000);
+            setTimeout(function(){
+                location.reload();
+            },4000);
+        }
+    });
+});
+
+/**
+ * search sales history
+ */
+$("#searchhistory").on("change keyup paste", function(){
+    $("#transactions_table tbody tr").remove();
+    
+    var trans_id = $(this).val();
+     searchTransaction(trans_id,"sales_history");
+    
+});
+
+//search pending sales
+$("#searchpendingsales").on("change keyup paste", function(){
+   
+    var trans_id = $(this).val();
+       searchTransaction(trans_id,"pending_sales");
+   
+});
+
+
+function searchTransaction(id,trans_type){
+   
+   return $.ajax({
+        url:"sales/search/"+id,
+        method:"get",
+        dataType:"html",
+       cache:false,
+       success:(data)=>{
+            trans_type=="sales_history" ?  
+            $("#transactions_table tbody").html(data) : 
+            $("#held_transactions_table tbody").html(data);   
+       }
+    });
+   
+}
 
 /**
  * Print POS receipt 
@@ -638,60 +767,3 @@ window.onclick = function (event) {
         modal.style.display = "none";
     }
 }
-
-
-/**
- * Fetch pending transaction by id
- */
-
-$("#held_transactions_table tbody tr").on("click", function(event){
-    let str = $(this).find("td:nth-child(1)").text();
-    var trans_id = str.substring(1);
-    $.ajax({
-        url:"sales/transaction/"+trans_id,
-        method:"get",
-        dataType:"html",
-        success:(data)=>{
-            $("#print-receipt-btn").hide();
-            $(".card-info").show();
-            $("#held_trans_data").html(data);
-        }
-    });
-});
-
-/**
- * Complete Held Transaction
- */
-$("#held_trans_data").on('click','#complete-trans-btn', function(){
-    var str = $("#transaction_id").text()
-    var trans_id = str.substring(1);
-    $.ajax({
-        url:"sales/finalize/"+trans_id,
-        method:"post",
-        dataType:"json",
-        success:(data)=>{
-            printReceipt(trans_id);
-            $(".msg").text(data.message);
-            $(".alert").show();
-        }
-    });
-});
-/**
- * delete pending transaction 
- */
-
-
-$("#held_trans_data").on('click','#delete-trans-btn', function(){
-    var str = $("#transaction_id").text()
-    var trans_id = str.substring(1);
-    $.ajax({
-        url:"sales/delete/"+trans_id,
-        method:"post",
-        dataType:"json",
-        success:(data)=>{
-            printReceipt(trans_id);
-            $(".msg").text(data.message);
-            $(".alert").show();
-        }
-    });
-});

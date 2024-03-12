@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function(){
     Route::get('pos/search/{phrase}',[PartialsController::class,'posproductsearch'])->name('pos.search');
 
     Route::get('products',[ProductController::class,'index'])->name('products');
+    Route::get('products/show/{sku}',[ProductController::class,'show'])->name('products.show');
     Route::post('products/store',[ProductController::class,'store'])->name('products.store');
     Route::get('products/edit/{sku}',[ProductController::class,'edit'])->name('products.edit');
     Route::post('products/update',[ProductController::class,'update'])->name('products.update');
@@ -41,7 +42,8 @@ Route::middleware('auth')->group(function(){
     Route::get('sales/transaction/{id}',[PartialsController::class,'create'])->name('sales.transaction');
     Route::post('sales/finalize/{id}',[SalesController::class,'update'])->name('sales.update');
     Route::post('sales/delete/{id}',[SalesController::class,'destroy'])->name('sales.delete');
-
+    Route::get('sales/search/{id}',[PartialsController::class,'sales_history_search'])->name('sales.show');
+    
 
     Route::get('sales/receipt/{id}',[PartialsController::class,'load_receipt'])->name('sales.receipt');
 });

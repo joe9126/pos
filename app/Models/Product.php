@@ -20,7 +20,7 @@ class Product extends Model
     protected $foreignKey = 'category_id';
 
 
-    protected $fillable = [
+    public $fillable = [
         'sku','title','category_id','quantity','image','unit_price','discount','tax_id','status','stock_notice','rating'
     ];
 

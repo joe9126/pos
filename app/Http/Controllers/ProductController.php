@@ -13,19 +13,28 @@ use App\Models\Supplier_product;
 class ProductController extends Controller
 {
     public function index(){
-
+        $products = Product::latest('created_at')->take(10)->get();
         $categories  = Category::all();
         $taxgroups = Tax::all();
         $suppliers = Supplier::all();
-        return view('products.index',compact(['categories','taxgroups','suppliers']));
+        return view('products.products',compact(['categories','taxgroups','suppliers','products']));
     }
 
-    public function show($id){
-        
+    public function show($sku){
+
+        $prod_data = Product::where('sku',$sku)
+        ->with('category','tax')
+        ->get();
+        //var_dump($prod_data);
+        $categories  = Category::all();
+        $taxgroups = Tax::all();
+        $suppliers = Supplier::all();
+        return view('partials.editproduct',compact(['prod_data','taxgroups','suppliers','categories']));
     }
 
     public function create(){
-        
+       
+       
     }
 
     public function store(Request $request){
@@ -69,9 +78,10 @@ class ProductController extends Controller
      */
     public function edit($sku){
       
-        $prod_data = Product::where('sku','=',$sku)
+        $prod_data = Product::where('sku',$sku)
                     ->with('category','tax')
                     ->get();
+                   // var_dump($prod_data)
         return response()->json($prod_data);
     }
 

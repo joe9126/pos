@@ -1,7 +1,7 @@
 <div class="col-md-6" style="border-right: 1px solid #ccc; min-height:75vh">
   
     
-    <div class="alert alert-success alert-dismissible" role="alert" style="height:3rem; display:none">
+    <div class="alert alert-info alert-dismissible" role="alert" style="height:3rem; display:none">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         <div><span class="msg"></span></div>
     </div>

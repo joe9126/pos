@@ -12,14 +12,14 @@
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   /*overflow: auto; /* Enable scroll if needed */
- /* background-color: rgb(0,0,0); /* Fallback color */
-  /*background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 .modal-content {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
- /* background-color: #fefefe;
+  background-color: #fefefe;
   margin: 30px 30px ; /* 15% from the top and centered */
  /* padding: 20px;
   border: 1px solid #888;
@@ -48,6 +48,28 @@
     /*box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;*/
     border-radius: 10px;
     padding: 0.5em 0.5em;
+}
+.card-btn{
+  border-radius: 0;
+  
+  /*box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 5px;*/
+  width: 20rem;
+  height: 10rem;
+ 
+  transition: 453ms;
+  font-weight: 900;
+}
+.card-btn:hover{
+  cursor: pointer;
+  transform: scale(1.02);
+  background-color: #0d6efd;
+  color: #fff;
+  font-weight: bold;
+}
+
+.active-btn{
+  background-color: #0d6efd;
+  color: #fff;
 }
 
 .card-info{
@@ -110,7 +132,7 @@ ul{
  }
 
   .item-tile{
-    border: 1px solid rgb(143, 143, 150);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 5px;
     width: 10rem;
     height: auto;
     padding-left: 2px;
@@ -122,14 +144,23 @@ ul{
     text-align: center;
     transition: 452ms;
   }
-  .item-tile:hover{
+  .edit-prod{
+    display: none !important;
+  }
+  .prod_item_link{
+    text-decoration: none;
+    color: #023;
+  }
+  .item-tile:hover {
     transform: scale(1.05);
     cursor: pointer;
   }
   .item_link{
     text-decoration: none;
     color: #023;
+    border: none;
   }
+  
   .item-txt{
     text-align: center;
     font-size: 0.8rem;
@@ -246,8 +277,8 @@ body,input[type='search']{
             text-align: center;
 }
 .searchfield{
-  padding: 25px !important;
-  text-align: right;
+  
+ 
 }
 table#transactions_table, tbody, tr, td{
   font-size: 0.8rem;

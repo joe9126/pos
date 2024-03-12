@@ -21,7 +21,9 @@ class SalesController extends Controller
         return response()->json($transaction);
     }
 
-    public function edit($id){}
+    public function edit($id){
+        
+    }
 
     public function update($id){
         $status = Transaction::where('id',$id)
@@ -39,5 +41,12 @@ class SalesController extends Controller
     public function destroy($id){
         $transaction = Transaction::find($id);
         $status = $transaction->delete();
+        $message="Pending transaction deleted."; $status="success";  $response_code =200;
+        if(!$status){
+            $message = "Pending transaction not deleted.";
+            $status = "error";
+            $response_code =500;
+        }
+        return response()->json(['status'=>$status,'message'=>$message],$response_code);
     }
 }

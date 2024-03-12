@@ -42,7 +42,7 @@
        
         <div class="modal-content mt-3 p-3"
             style="width:600px; height:auto: max-height:300px; overflow:auto; margin-left:auto; margin-right:auto;">
-            <p>Test print</p>
+            
         </div>
        
     </div>

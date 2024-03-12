@@ -15,9 +15,15 @@ class PartialsController extends Controller
        
     }
 
+    //Sales search by transaction id
+    public function sales_history_search($id){
+        $transaction_search = Transaction::find($id);
+        return view('partials.salessearch',compact(['transaction_search']));
+    }
+
 
      /**
-     * Search by phrase
+     * POS Search product by phrase
      */
 
      public function posproductsearch($keyword){
@@ -31,9 +37,6 @@ class PartialsController extends Controller
          return view('partials.posproductsview',compact(['prod_search_result']));
        
       }
-
-    
-
       /**
        * Load POS receipt
        */
