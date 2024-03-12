@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function(){
 
     Route::get('sales',[SalesController::class,'create'])->name('sales.create');
     Route::get('sales/transaction/{id}',[PartialsController::class,'create'])->name('sales.transaction');
+    Route::post('sales/finalize/{id}',[SalesController::class,'update'])->name('sales.update');
+    Route::post('sales/delete/{id}',[SalesController::class,'destroy'])->name('sales.delete');
+
 
     Route::get('sales/receipt/{id}',[PartialsController::class,'load_receipt'])->name('sales.receipt');
 });

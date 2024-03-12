@@ -1,4 +1,11 @@
 <div class="col-md-6" style="border-right: 1px solid #ccc; min-height:75vh">
+  
+    
+    <div class="alert alert-success alert-dismissible" role="alert" style="height:3rem; display:none">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div><span class="msg"></span></div>
+    </div>
+
     <div class="card-info">
         <div class="d-flex flex-column mt-3">
             <h6>Transaction ID</h6>
@@ -30,10 +37,20 @@
             </div>
             <hr>
         </div>
-        <div class="d-flex flex-row justify-content-between">
-            <button class="btn btn-primary mt-2" id="print-receipt-btn">
-                <i class="fa-solid fa-print"></i> Print Receipt
-            </button>
+        <div class="d-flex flex-row justify-content-center">
+            @if ($transaction_data->status ==1)
+                 <button class="btn btn-primary mt-2" id="print-receipt-btn">
+                    <i class="fa-solid fa-print"></i> Print Receipt
+                </button>
+                @else
+                <button class="btn btn-primary mt-2 m-2 w-50" id="complete-trans-btn">
+                    Finalize <i class="fa-solid fa-circle-check"></i>
+                </button>
+                <button class="btn btn-danger mt-2 m-2 w-50" id="delete-trans-btn">
+                    Delete <i class="fa-solid fa-circle-xmark"></i>  
+                </button>
+            @endif
+           
         </div>
     </div>
 </div>

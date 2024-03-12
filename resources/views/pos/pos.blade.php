@@ -125,12 +125,12 @@
                         </tbody>
                     </table>
                     <div class="d-flex flex-row justify-content-between mt-3">
-                        <button type="button" id="transactbtn" class="btn btn-primary w-50 m-2">Transact</button>
-                        <button type="button" id="clearposbtn" class="btn btn-danger w-50 m-2">Clear</button>
+                        <button type="button" id="transactbtn" class="btn btn-primary w-50 m-2 posactivitybtn" disabled>Transact</button>
+                        <button type="button" id="clearposbtn" class="btn btn-danger w-50 m-2 posactivitybtn" disabled>Clear</button>
                     </div>
                     <div class="row">
                         <div class="col-md-12 d-flex justify-content-center">
-                            <input type="button" value="Hold Transaction" class="btn btn-secondary btn-block w-100 m-2">
+                            <input type="button" id="holdtransactionbtn" value="Hold Transaction" class="btn btn-secondary btn-block w-100 m-2 posactivitybtn" disabled>
                         </div>
                     </div>
                 </div>

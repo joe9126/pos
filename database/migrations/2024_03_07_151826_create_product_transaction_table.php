@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('product_transaction', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_id');
-            $table->string('product_id');
+            $table->unsignedBigInteger('transaction_id');
+            $table->unsignedBigInteger('product_id');
             $table->float('unitprice');
             $table->integer('units');
             $table->float('subtotal');
+
+            // Define the foreign key constraints with onDelete('cascade')
+             $table->foreign('product_id')->references('id')->on('product')->onDelete('cascade');
+            $table->foreign('transaction_id')->references('id')->on('transaction')->onDelete('cascade');
             $table->timestamps();
         });
     }

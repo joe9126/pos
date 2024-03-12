@@ -59,6 +59,9 @@ $(function () {
 
                     if (rows == 0) {
                         $("#pos_table").find('tbody').append(item);
+                        $(".posactivitybtn").prop('disabled',false);
+                       
+                        
                     } else {
                         var match = -1;
                         $("#pos_table tbody tr").each(function () {
@@ -122,6 +125,7 @@ function getSalestotal() {
     return grandtotal;
 }
 
+
 /**
  * Add item units on POS list
  */
@@ -174,17 +178,34 @@ $("#pos_cost_table").on("input", "td[contenteditable]", function () {
 /**
  *  Remove item from POS list
  */
+var interval;
 $("#items_tbody").on('click', ".positem_remove", function (event) {
-    $(this).closest('tr').remove();
-    getSalestotal();
-});
+    $(this).closest('tr').remove(); var list=0;
+    list = document.getElementById("pos_table").rows.length;
 
+   interval = setInterval(disablePOSbtns,500);
+      getSalestotal();
+});
+function disablePOSbtns(){
+    
+        //var pos_list = $("#pos_table");
+        var currCount = $("#pos_table>tbody>tr").length;
+                if(currCount<1){
+                    $(".posactivitybtn").prop('disabled',true);
+                    clearInterval(interval);
+                   // console.log(currCount);
+                }
+    
+}
 /**
  * clear POS list
  */
 
 $("#clearposbtn").on('click', function () {
     $("#pos_table tbody tr").remove();
+    $('.posactivitybtn').prop('disabled',true);
+  
+    getSalestotal();
 });
 
 
@@ -230,67 +251,95 @@ $("#payment").on("keyup change", function () {
  * EXECUTE TRANSACTION
  */
 $("#executebtn").on('click', function (event) {
-    /**GET TRANSACTED ITEMS */
-    var sale_data = [];
-    var rows = $("#pos_cost_table tbody tr").length;
-    $("#pos_table tbody tr").each(function () {
-        let item_sale = {
-            product_id: $(this).find("td:nth-child(1)").text(),
-            units: $(this).find("td:nth-child(4)").text(),
-            unitprice: $(this).find("td:nth-child(6)").text(),
-            subtotal: parseFloat($(this).find("td:nth-child(6)").text()) * parseFloat($(this).find("td:nth-child(4)").text())
-        }
-        sale_data.push(item_sale);
-    });
-
-    //get  tranaction totals
-
-    var subtotal = parseFloat(numeral($("#pos_cost_table tbody tr:nth-child(1) td:nth-child(2)").text()).format('0.00'));
-    var discount = parseFloat(numeral($("#pos_cost_table tbody tr:nth-child(2) td:nth-child(3)").text()).format('0.00'));
-    var taxrate = parseFloat($("#pos_cost_table tbody tr:nth-child(3) td:nth-child(2)").text());
-    var grandtotal = parseFloat(numeral($("#pos_cost_table tbody tr:nth-child(4) td:nth-child(2)").text()).format('0.00'));
     var payment = parseFloat($("#payment").val());
     var payment_mode = "Cash";
-    let transaction = {
-        subtotal: subtotal, discount: discount, taxrate: taxrate, grandtotal: grandtotal, payment: payment, payment_mode: payment_mode
-    };
-    $.ajax({
-        method: 'post',
-        data: { "transaction": transaction, "sale_data": sale_data },
-        url: "pos/transact",
-        dataType: "json",
-        beforeSend: function () {
-            $(".alert").removeClass("alert-danger");
-            $(".alert").addClass("alert-primary");
-            $(".msg").text("Transacting. Please wait...");
-            $(".alert").css("display", "block");
-            $(".spinner-border").css("display", "block");
 
-        },
-        success: (data) => {
-            // console.log(data);
-            if (data.status = 'success') {
-                $(".alert").removeClass("alert-danger");
-                $(".alert").addClass("alert-success");
-                $(".msg").text(data.message);
-                $(".alert").show();
-                $(".spinner-border").css("display", "none");
-                $("#payment").val(''); $("#payment").focus();
-                $("#cashtotal").text('0.00');
-                $("#cashbalance").text('0.00');
-                $("#executebtn").prop('disabled', true);
-
-                printReceipt(data.transaction_id);
-                
-                setTimeout(function () {
-                    $(".alert").slideUp('slow').fadeOut(function () {
-                        $("#pos_table tbody tr").remove();
-                    });
-                }, 4000);
-            }
-        }
-    });
+    completeTransaction(payment, payment_mode,"cash");
 });
+
+/**
+ * HOLD TRANSACTION
+ */
+
+$("#holdtransactionbtn").on('click', function (event) {
+    completeTransaction(0,"None","hold");
+});
+
+
+//Complete POS Transaction
+function completeTransaction(payment,payment_mode,transaction_type){
+        /**GET TRANSACTED ITEMS */
+        var sale_data = [];
+        var rows = $("#pos_cost_table tbody tr").length;
+        $("#pos_table tbody tr").each(function () {
+            let item_sale = {
+                product_id: $(this).find("td:nth-child(1)").text(),
+                units: $(this).find("td:nth-child(4)").text(),
+                unitprice: $(this).find("td:nth-child(6)").text(),
+                subtotal: parseFloat($(this).find("td:nth-child(6)").text()) * parseFloat($(this).find("td:nth-child(4)").text())
+            }
+            sale_data.push(item_sale);
+        });
+    
+        //get  tranaction totals
+    
+        var subtotal = parseFloat(numeral($("#pos_cost_table tbody tr:nth-child(1) td:nth-child(2)").text()).format('0.00'));
+        var discount = parseFloat(numeral($("#pos_cost_table tbody tr:nth-child(2) td:nth-child(3)").text()).format('0.00'));
+        var taxrate = parseFloat($("#pos_cost_table tbody tr:nth-child(3) td:nth-child(2)").text());
+        var grandtotal = parseFloat(numeral($("#pos_cost_table tbody tr:nth-child(4) td:nth-child(2)").text()).format('0.00'));
+        var status;
+        transaction_type=="hold" ? status =0 : status=1;
+
+        let transaction = {
+            subtotal: subtotal, discount: discount, 
+            taxrate: taxrate, grandtotal: grandtotal, 
+            payment: payment, payment_mode: payment_mode,
+            status: status
+        };
+
+        $.ajax({
+            method: 'post',
+            data: { "transaction": transaction, "sale_data": sale_data },
+            url: "pos/transact",
+            dataType: "json",
+            beforeSend: function () {
+                $(".alert").removeClass("alert-danger");
+                $(".alert").addClass("alert-primary");
+                $(".msg").text("Transacting. Please wait...");
+                $(".alert").css("display", "block");
+                $(".spinner-border").css("display", "block");
+    
+            },
+            success: (data) => {
+                // console.log(data);
+                if (data.status = 'success') {
+                    $(".alert").removeClass("alert-danger");
+                    $(".alert").addClass("alert-success");
+                    
+                    transaction_type=="hold" ?  $("#msg").text("Transaction kept on hold.") : $(".msg").text(data.message);
+                    $(".alert").show();
+                    $(".spinner-border").css("display", "none");
+                    $("#payment").val(''); $("#payment").focus();
+                    $("#cashtotal").text('0.00');
+                    $("#cashbalance").text('0.00');
+                    $("#executebtn").prop('disabled', true);
+                    
+                    if(transaction_type =="cash"||transaction_type=="mpesa"){
+                        printReceipt(data.transaction_id);
+                    }
+                   
+                    
+                    setTimeout(function () {
+                        $(".alert").slideUp('slow').fadeOut(function () {
+                            $("#pos_table tbody tr").remove();
+                            $('.posactivitybtn').prop('disabled',true);
+      
+                        });
+                    }, 4000);
+                }
+            }
+        });
+}
 
 /**
  * SEARCH PRODUCT IN POS
@@ -589,3 +638,60 @@ window.onclick = function (event) {
         modal.style.display = "none";
     }
 }
+
+
+/**
+ * Fetch pending transaction by id
+ */
+
+$("#held_transactions_table tbody tr").on("click", function(event){
+    let str = $(this).find("td:nth-child(1)").text();
+    var trans_id = str.substring(1);
+    $.ajax({
+        url:"sales/transaction/"+trans_id,
+        method:"get",
+        dataType:"html",
+        success:(data)=>{
+            $("#print-receipt-btn").hide();
+            $(".card-info").show();
+            $("#held_trans_data").html(data);
+        }
+    });
+});
+
+/**
+ * Complete Held Transaction
+ */
+$("#held_trans_data").on('click','#complete-trans-btn', function(){
+    var str = $("#transaction_id").text()
+    var trans_id = str.substring(1);
+    $.ajax({
+        url:"sales/finalize/"+trans_id,
+        method:"post",
+        dataType:"json",
+        success:(data)=>{
+            printReceipt(trans_id);
+            $(".msg").text(data.message);
+            $(".alert").show();
+        }
+    });
+});
+/**
+ * delete pending transaction 
+ */
+
+
+$("#held_trans_data").on('click','#delete-trans-btn', function(){
+    var str = $("#transaction_id").text()
+    var trans_id = str.substring(1);
+    $.ajax({
+        url:"sales/delete/"+trans_id,
+        method:"post",
+        dataType:"json",
+        success:(data)=>{
+            printReceipt(trans_id);
+            $(".msg").text(data.message);
+            $(".alert").show();
+        }
+    });
+});

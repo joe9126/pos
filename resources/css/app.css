@@ -281,3 +281,9 @@ padding-top: 0.3rem !important;
 margin-left: 2px !important;
 
 }
+
+#held_transactions_table tbody tr:hover td{
+  cursor: pointer;
+  background-color: #0d6efd;
+  color: #fff;
+}

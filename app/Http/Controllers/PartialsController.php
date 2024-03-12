@@ -16,7 +16,6 @@ class PartialsController extends Controller
     }
 
 
-
      /**
      * Search by phrase
      */
@@ -32,6 +31,8 @@ class PartialsController extends Controller
          return view('partials.posproductsview',compact(['prod_search_result']));
        
       }
+
+    
 
       /**
        * Load POS receipt

@@ -9,8 +9,9 @@ use App\Models\Transaction;
 class SalesController extends Controller
 {
     public function create(){
-        $transactions = Transaction::latest('created_at')->take(10)->get();
-        return view('sales.sales',compact(['transactions']));
+        $transactions = Transaction::where('status',true)->latest('created_at')->take(10)->get();
+        $held_transactions = Transaction::where('status',false)->latest('created_at')->take(10)->get();
+        return view('sales.sales',compact(['transactions','held_transactions']));
     }
 
     public function index(){}
@@ -22,7 +23,21 @@ class SalesController extends Controller
 
     public function edit($id){}
 
-    public function update($id){}
+    public function update($id){
+        $status = Transaction::where('id',$id)
+        ->update([
+            'status'=>true,
+            'created_at'=>now(),
+            'updated_at'=>now()
+        ]);
+        if(!$status){
+            return response()->json(['status'=>'error','message'=>'Transaction not completed.'],500);
+        }
+        return response()->json(['status'=>'success','message'=>'Transaction completed.'],200);
+    }
 
-    public function destroy($id){}
+    public function destroy($id){
+        $transaction = Transaction::find($id);
+        $status = $transaction->delete();
+    }
 }

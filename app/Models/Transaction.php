@@ -17,7 +17,7 @@ class Transaction extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'subtotal','taxrate','discount','grandtotal','payment','payment_mode','user_id'
+        'subtotal','taxrate','discount','grandtotal','payment','payment_mode','user_id','status'
     ];
 
     /**

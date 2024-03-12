@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('payment');
             $table->string('payment_mode')->default("Cash");
             $table->string('user_id');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
