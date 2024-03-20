@@ -38,9 +38,9 @@ class POSController extends Controller
 
         foreach($prod_transact as $productData){
             $productData['transaction_id'] = $transactionID;
-            $soldQty = $productData['units'];
             $status  = Product_transaction::create($productData);
-
+            
+            $soldQty = $productData['units'];
             //fetch product from inventory
             $product = Product::find($productData['product_id']);
 

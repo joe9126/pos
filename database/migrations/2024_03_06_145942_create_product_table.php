@@ -19,10 +19,9 @@ return new class extends Migration
             $table->integer('quantity')->default(0);
             $table->string('image')->nullable();
             $table->float('unit_price');
-            $table->float('discount')->default(0);
+            //$table->float('discount')->default(0);
             $table->string('tax_id');
             $table->boolean('status')->default(true);
-            $table->integer('stock_notice');
             $table->string('rating')->default(0);
             $table->timestamps();
         });

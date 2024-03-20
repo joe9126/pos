@@ -27,7 +27,7 @@
                     </div>
                     <hr>
                     <div class="" id="products_list">
-                        <div class="d-flex flex-row flex-wrap align-items-start justify-content-center itemslist">
+                        <div class="d-flex flex-row flex-wrap align-items-start justify-content-start itemslist">
                             @foreach ($products as $product)
                                 <a href="pos/{{ $product->id }}" class="item_link">
                                     <div class="item-tile p-2 m-1">
@@ -44,7 +44,7 @@
                                         <h5 class="item_title">{{ $product->title }}</h5>
                                         <h6>{{ $product->quantity }} units left</h6>
                                         <span class="item_cat">{{ $product->category->title }}</span>
-                                        <h5 class="item-txt fw-bold"> KES. {{ $product->unit_price }}</h5>
+                                        <h5 class="item-txt fw-bold"> {{$currency}}{{ number_format($product->unit_price,2) }}</h5>
                                         <div class="d-flex justify-content-center">
                                             <span class="stars" data-rating="{{ $product->rating }}"
                                                 data-num-stars="5"></span>

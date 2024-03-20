@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Taxgroup;
 use App\Models\Transaction;
 use App\Models\Supplier;
+use App\Models\Product_restockrequest;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Product extends Model
 {
@@ -21,7 +22,7 @@ class Product extends Model
 
 
     public $fillable = [
-        'sku','title','category_id','quantity','image','unit_price','discount','tax_id','status','stock_notice','rating'
+        'sku','title','category_id','quantity','image','unit_price','tax_id','status','rating',
     ];
 
       /**
@@ -51,6 +52,15 @@ class Product extends Model
     public function supplier():BelongsToMany{
         return $this->belongsToMany(Supplier::class);
     }
+
+    /**
+     * A product belongs to one restock requests.
+     */
+    public function restockrequest():BelongsToMany{
+        return $this->belongsToMany(Product_restockrequest::class);
+    }
+
+    
 
     // Scope to search products by title, SKU, or category
     public function scopeSearch($query, $keyword)

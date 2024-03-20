@@ -64,18 +64,18 @@
                     <tr>
                         <td>{{ $product->title }}</td>
                         <td>{{ $product->pivot['units'] }} units</td>
-                        <td>{{ number_format($product->pivot['unitprice'], 2) }}</td>
+                        <td>{{$currency}}{{ number_format($product->pivot['unitprice'], 2) }}</td>
                     </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="2" class="fw-bold">Subtotal</td>
-                    <td class="fw-bold">{{ number_format($transaction_data->subtotal, 2) }}</td>
+                    <td class="fw-bold">{{$currency}}{{ number_format($transaction_data->subtotal, 2) }}</td>
                 </tr>
                 <tr>
                     <td colspan="2">Discount (-)</td>
-                    <td class="text-danger">{{ number_format($transaction_data->discount, 2) }}</td>
+                    <td class="text-danger">{{$currency}}{{ number_format($transaction_data->discount, 2) }}</td>
                 </tr>
                 <tr>
                     @php
@@ -84,22 +84,22 @@
                             ($transaction_data->subtotal - $transaction_data->discount);
                     @endphp
                     <td colspan="2">Taxes (+) {{ $transaction_data->taxrate }}%</td>
-                    <td class="text-success">{{ number_format($taxamount, 2) }}</td>
+                    <td class="text-success">{{$currency}}{{ number_format($taxamount, 2) }}</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="fw-bold">Grand Total</td>
-                    <td class="fw-bold">{{ number_format($transaction_data->grandtotal, 2) }}</td>
+                    <td class="fw-bold">{{$currency}}{{ number_format($transaction_data->grandtotal, 2) }}</td>
                 </tr>
                 <tr>
                     <td colspan="2">Payment</td>
-                    <td>{{ number_format($transaction_data->payment, 2) }}</td>
+                    <td>{{$currency}}{{ number_format($transaction_data->payment, 2) }}</td>
                 </tr>
                 <tr>
                     @php
                         $balance = $transaction_data->payment - $transaction_data->grandtotal;
                     @endphp
                     <td colspan="2">Balance</td>
-                    <td>{{ number_format($balance, 2) }}</td>
+                    <td>{{$currency}}{{ number_format($balance, 2) }}</td>
                 </tr>
             </tfoot>
         </table>

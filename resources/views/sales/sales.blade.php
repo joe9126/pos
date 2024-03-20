@@ -35,7 +35,7 @@
                                                 <td>#{{ $transaction->id }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y g:i A') }}
                                                 </td>
-                                                <td>{{ number_format($transaction->grandtotal, 2) }}</td>
+                                                <td>{{$currency}}{{ number_format($transaction->grandtotal, 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -72,7 +72,7 @@
                                         <td>#{{ $held_transaction->id }}</td>
                                         <td>{{ \Carbon\Carbon::parse($held_transaction->created_at)->format('d/m/Y g:i A') }}
                                         </td>
-                                        <td>{{ number_format($held_transaction->grandtotal, 2) }}</td>
+                                        <td>{{$currency}}{{ number_format($held_transaction->grandtotal, 2) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

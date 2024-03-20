@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Transaction;
+use App\Models\Product_restockrequest;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -50,5 +52,12 @@ class User extends Authenticatable
      */
     public function transaction():HasMany{
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * A user has many restock requests
+     */
+    public function product_restockrequest():HasMany{
+        return $this->hasMany(Product_restockrequest::class);
     }
 }

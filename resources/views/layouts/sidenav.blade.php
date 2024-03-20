@@ -29,8 +29,8 @@
                     <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Sales</span>
                  </a> 
                 
-                <a href="#" class="nav_link"> 
-                    <i class='bx bx-user nav_icon'></i> <span class="nav_name">Users</span> 
+                <a href="{{ url('cashier') }}" class="nav_link"> 
+                    <i class='bx bx-user nav_icon'></i> <span class="nav_name">Cashier</span> 
                 </a>
                 <a href="#" class="nav_link"> 
                     <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span>

@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Supplier_product extends Model
+class Settings extends Model
 {
     use HasFactory;
-    protected $table = "supplier_product";
+    protected $table = "store_settings";
 
     protected $fillable = [
-        'supplier_id','product_id','unit_cost', 'quantity','supply_term',"comment",'user_id'	
+        'store_name','slogan','address','telephone','email','logo','low_stock_level',
     ];
 }

@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Supplier_product extends Model
+class Product_restockrequest extends Model
 {
     use HasFactory;
-    protected $table = "supplier_product";
+
+    protected $table = 'product_restockrequest';
 
     protected $fillable = [
-        'supplier_id','product_id','unit_cost', 'quantity','supply_term',"comment",'user_id'	
+        'restockrequest_id','product_id','quantity','status'
     ];
+
+    
 }
