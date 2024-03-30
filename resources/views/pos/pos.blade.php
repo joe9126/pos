@@ -98,7 +98,14 @@
                                 <td id="pos_subtotal" style="width:40%; border:1px solid #c7c7c7;">0.00</td>
                             </tr>
                             <tr>
-                                <td style="width:30%; border:1px solid #c7c7c7;" class="text-danger fw-bold">Discount %</td>
+                                <td style="width:30%; border:1px solid #c7c7c7;" class="text-danger fw-bold">
+                                    <select name="sel_discount" id="sel_discount">
+                                        <option value="0">Discount %</option>
+                                        @foreach ($discounts as $discount)
+                                        <option value="{{$discount->rate}}">{{$discount->title}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
                                 <td contenteditable="true" style="width:30%; border:1px solid #c7c7c7;"
                                     class="text-danger fw-bold">0</td>
                                 <td style="width:30%; border:1px solid #c7c7c7;" id="pos_discount"

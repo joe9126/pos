@@ -55,7 +55,24 @@ Route::middleware('auth')->group(function(){
     Route::post('sales/delete/{id}',[SalesController::class,'destroy'])->name('sales.delete');
     Route::get('sales/search/{id}',[PartialsController::class,'sales_history_search'])->name('sales.show');
     Route::get('sales/receipt/{id}',[PartialsController::class,'load_receipt'])->name('sales.receipt');
-
-    Route::post('setting/update',[SettingsController::class,'update'])->name('settings.update');
     
+    Route::get('cashier',[CashierController::class,'create'])->name('cashier.create');
+    Route::get('cashier/sales',[PartialsController::class,'cashiersales'])->name('cashier.sales');
+    Route::get('cashier/today_sales_data',[CashierController::class,'todaycashiersalesdata'])->name('cashier.todaysalesdata');
+    Route::get('/today_trans',[CashierController::class,'index'])->name('cashier.today_trans');
+    Route::get('cashier/test',[PartialsController::class,'test'])->name('cashier.test');
+    Route::get('cashier/history',[CashierController::class,'saleshistory'])->name('cashier.history');
+    Route::get('cashier/history_data',[CashierController::class,'cashierhistorydata'])->name('cashier.historydata');
+   Route::post('/close_drawer',[CashierController::class,'close_drawer'])->name('cashier.close_drawer');
+
+   Route::get('cashier/drawerhistory_data',[CashierController::class,'drawerhistorydata'])->name('cashier.drawerhistorydata');
+   
+   Route::get('settings',[SettingsController::class,'create'])->name('settings.create');
+   Route::post('setting/update',[SettingsController::class,'update'])->name('settings.update');
+   Route::post('settings/store_update',[SettingsController::class,'store_update'])->name('settings.store_update');
+   Route::post('setting/disc_delete/{code}',[SettingsController::class,'delete'])->name('settings.delete');
+   Route::post('settings/update_discount',[SettingsController::class,'update_discount'])->name('settings.update_discount');
+
+  
+  
 });

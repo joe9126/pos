@@ -35,7 +35,7 @@
                 <a href="#" class="nav_link"> 
                     <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span>
                 </a>
-                 <a href="#" class="nav_link"> 
+                 <a href="{{ url('settings') }}" class="nav_link"> 
                     <i class='bx bx-cog nav_icon'></i> <span class="nav_name">Settings</span>
                  </a>
                

@@ -1,4 +1,6 @@
 import './bootstrap';
+import 'laravel-datatables-vite';
+
 import 'parsleyjs/dist/parsley';
 import 'jquery/dist/jquery';
 import 'jquery-ui-dist/jquery-ui';

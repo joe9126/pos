@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
 use App\Models\Product;
 use App\Models\Category;
@@ -11,12 +13,14 @@ use App\Models\Supplier;
 use App\Models\Settings;
 use App\Models\Restockrequest;
 
+use App\DataTables\UsersDataTable;
+
 class PartialsController extends Controller
 {
     public function create($id){
         $transaction_data = Transaction::with('product','user')->find($id);
        // var_dump($transaction_data);
-        return view('partials.loopContainer',compact(['transaction_data']));
+        return view('partials.heldtransaction',compact(['transaction_data']));
        
     }
 
@@ -114,6 +118,33 @@ class PartialsController extends Controller
         $restock_req_items = Restockrequest::where('id',$id)->with('product')->get();
         //var_dump($restock_req_items);
         return view('partials.restockrequestitems', compact(['restock_req_items']));
+    }
+
+    //get cashier sales 
+    public function cashiersales(){
+        $today = now()->format('Y-m-d');
+      
+       $today_sales = Transaction::select('payment_mode', DB::raw('SUM(grandtotal) as total_amount'))
+                                ->whereDate('created_at',$today)
+                                ->where('user_id',Auth::user()->id)
+                                ->groupBy('payment_mode')
+                                ->get();
+
+        $today_cashier_disc = Transaction::where('user_id', Auth::user()->id)
+                     ->whereDate('created_at', $today)
+                    ->sum('discount');
+                   
+                    $today_transactions  = Transaction::whereDate('created_at',$today)
+                    ->where('user_id',Auth::user()->id)
+                    ->get();
+    
+               
+       return view('partials.cashiersales',compact(['today_sales','today_cashier_disc','today_transactions']));
+    }
+
+
+    public function test(UsersDataTable  $dataTable){
+        return $dataTable->render('cashier.cashiertest');
     }
 
 }

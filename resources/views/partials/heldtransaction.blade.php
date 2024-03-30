@@ -44,7 +44,7 @@
                 </button>
                 @else
                 <button class="btn btn-primary mt-2 m-2 w-50" id="complete-trans-btn">
-                    Finalize <i class="fa-solid fa-circle-check"></i>
+                    Confirm <i class="fa-solid fa-circle-check"></i>
                 </button>
                 <button class="btn btn-danger mt-2 m-2 w-50" id="delete-trans-btn">
                     Delete <i class="fa-solid fa-circle-xmark"></i>  

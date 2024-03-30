@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Product_transaction;
 use App\Models\Transaction;
@@ -28,6 +29,8 @@ class SalesController extends Controller
     public function update($id){
         $status = Transaction::where('id',$id)
         ->update([
+            'payment_mode'=>'Cash',
+            'user_id'=>Auth::user()->id,
             'status'=>true,
             'created_at'=>now(),
             'updated_at'=>now()
@@ -38,6 +41,7 @@ class SalesController extends Controller
         return response()->json(['status'=>'success','message'=>'Transaction completed.'],200);
     }
 
+    //delete pending transaction
     public function destroy($id){
         $transaction = Transaction::find($id);
         $status = $transaction->delete();

@@ -64,8 +64,12 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 5px;
   padding: 0.8em 0.8em;
   margin-top: 5px;
+  transition: 451ms;
 }
-
+.card-info:hover{
+  cursor: pointer;
+  transform: scale(1.01);
+}
 input[type=text]{
     padding: 2px !important;
 }
@@ -216,7 +220,7 @@ span.stars span {
 }
  /** End Star Rating Styles **/
 
- #productimage{
+ #productimage, #logo_display, .logodisplay{
   border: 1px solid #83aae4;
   border-radius: 5px;
   background-image:url('');
@@ -225,6 +229,7 @@ span.stars span {
   height: 100px; width: 100px;
 
  }
+ 
 
  .setrating{
   transition: 452ms;
@@ -263,7 +268,9 @@ body,input[type='search']{
 table#transactions_table, tbody, tr, td{
   font-size: 0.8rem;
 }
-table#transactions_table tbody tr:hover td, #requests_table tbody tr:hover td{
+table#transactions_table tbody tr:hover td, 
+#requests_table tbody tr:hover td,
+#today_sales_table tbody tr:hover td{
   cursor: pointer;
   background-color: #0d6efd;
   color: #fff;
@@ -323,4 +330,131 @@ margin-left: 2px !important;
 
 #send_requestbtn, #print_requestbtn{
   display: none;
+}
+
+#cashiersales-table{
+  width: 63em !important;
+}
+#cashiersales-table tbody tr:hover td,#cashierhistory_table tbody tr:hover td{
+  cursor: pointer;
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+#exit_history_btn, #exit_btn{
+  border-radius: 100%;
+  width: 1em;
+  height: 1em;
+  font-weight: bold;
+  text-align: center;
+  padding: 1em 1em;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  transition: 451ms;
+}
+#exit_history_btn:hover, #exit_btn:hover{
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+.card-discount, #new_discount, .card-template{
+  border-radius: 10px;
+  width: 10em;
+  height: 10em;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 2px;
+  /*background-color: var(--randombg);*/
+  transition: 452ms;
+}
+.card-discount:hover{
+  cursor: pointer;
+  transform: scale(1.09);
+}
+.edit_discount{
+  display: none;
+  border: none;
+  background-color: inherit;
+}
+.disc_status{
+  font-size: .3 em !important;
+}
+.divider{
+  width: inherit;
+  height: 2px;
+  background-color: #0d6efd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+ 
+}
+.edit_storebtn{
+  border: none;
+  background-color: inherit;
+  font-weight: bold;
+  color: #0d6efd;
+  font-size: 2em;
+  transition: 451ms;
+}
+.edit_storebtn:hover{
+  transform: scaleX(1.05);
+}
+
+.logo{
+  width: 1em;
+  height: 1em;
+  border-radius: 100%;
+  border: 1px solid #000;
+  background-color: #000;
+  background-image: url('../public_uploads/shoplogo.jpg');
+}
+
+#sel_discount{
+  background-color: inherit;
+}
+.sale_info{
+  justify-content:center;
+   align-items:center;
+    display:flex ;
+    flex-direction: column;
+    color: #fff;
+}
+.user_icon{
+  width: 2em;
+  height: 2em;
+  text-align: center;
+  font-size: 2em;
+  border-radius: 100%;
+  border: 2px solid #0d6efd;
+  color: #0d6efd;
+}
+.user_name{
+  font-weight: bold;
+  color: #0d6efd;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 8em;
+  text-align: center;
+ 
+}
+.card-template{
+  padding: 3px !important;
+  transition: 455ms;
+}
+.card-template:hover{
+  cursor: pointer;
+  transform: scale(1.03);
+}
+
+.edit_btn{
+  border: none;
+  background-color: inherit;
+  font-weight: bold;
+  color: #0d6efd;
+  display: none;
+  /*transition: 451ms;*/
 }

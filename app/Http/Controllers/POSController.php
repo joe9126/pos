@@ -9,15 +9,16 @@ use App\Models\Category;
 use App\Models\Tax;
 use App\Models\Transaction;
 use App\Models\Product_transaction;
-
+use App\Models\Discount;
 class POSController extends Controller
 {
     
     public function index(Category $category){
        $products = Product::where('rating','>=',3)->limit(10)->get();
        $categories = Category::all();
+       $discounts = Discount::where('status',true)->get();
        $taxgroups = Tax::where('status',1)->get();
-        return view('pos.pos',compact(['products','categories','taxgroups']));
+        return view('pos.pos',compact(['products','categories','taxgroups','discounts']));
     }
 
     public function create(Request $request){

@@ -11,7 +11,7 @@
                
                     <div class="row ">
                         <div class="col-md-3">
-                            <div id="productimage"></div>
+                            <div id="productimage" class="image_display"></div>
                         </div>
 
                         <div class="col-md-9 ">
@@ -23,7 +23,7 @@
                                     autocomplete="off">
                             </div>
 
-                            <input type="file" name="image" id="image" class="form-control mt-3 prod-input" accept="image/png, image/jpeg" >
+                            <input type="file" name="image" id="image" class="form-control mt-3 prod-input image" accept="image/png, image/jpeg" >
                         </div>
                     </div>
                     <div class="input-group mb-3 mt-3">

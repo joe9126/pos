@@ -1,13 +1,15 @@
 <div class="row">
     <div class="col-md-4">
         <div id="wrapper">
-            <div id="invoice-POS" class="printable">
+            <div id="invoice-POS" class="printable" style="border:1px solid #000; width:60mm;">
 
-                <center id="top">
-                    <div class="logo"></div>
+                <center id="top" style="margin-top:3px;">
+                    <div class="logo">
+                        <img src="/public_uploads/shoplogo.jpg" alt="" srcset="" width="50px; height:50px;">
+                    </div>
                     <div class="info">
                         <h2 style="font-size: 1rem">{{$store_info[0]->store_name}}</h2>
-                        <p style="font-size: 0.6rem">Telephone {{$store_info[0]->slogan}}</p>
+                        <p style="font-size: 0.6rem">{{$store_info[0]->slogan}}</p>
                     </div><!--End Info-->
                 </center><!--End InvoiceTop-->
 
@@ -20,14 +22,14 @@
                         </p>
                     </div>
                 </div><!--End Invoice Mid-->
-
+                
                 <div id="bot">
                     <p class="info"  style="font-size:0.7rem; text-align:center">
                         <strong>Receipt </strong> #{{ $transaction_data->id }}
                         <strong>Date: </strong>
                         {{ \Carbon\Carbon::parse($transaction_data->created_at)->format('d/m/Y h:m a') }}
                     </p>
-                    <div id="table">
+                    <div id="table" style="padding:2px; display: flex; flex-direction:column; justify-content:center; align-items:center;">
                         <table style="width: 100%;">
                             <tr class="tabletitle">
                                 <td style="font-size:0.7rem; "><strong>Item</strong> </td>
@@ -43,7 +45,7 @@
                                     </td>
                                     <td class="tableitem">
                                         <p style="font-size:0.6rem;">
-                                           {{$currency}}{{ number_format($product->pivot['units'], 2) }}
+                                          {{ number_format($product->pivot['units'], 2) }}
                                         </p>
                                     </td>
                                     <td class="tableitem">
@@ -55,7 +57,7 @@
                             @endforeach
                             <tfoot>
                                 <tr>
-                                    <td colspan="3"><div style="width:10rem;height:1px; background-color:black; margin-bottom:2px;"></div></td>
+                                    <td colspan="3"><div style="width:12rem;height:1px; background-color:black; margin-bottom:2px;"></div></td>
                                 </tr>
                                 <tr class="tabletitle">
                                     <td colspan="2" style="font-size:0.7rem; font-weight:bold;">Subtotal</td>

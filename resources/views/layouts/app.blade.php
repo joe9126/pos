@@ -35,7 +35,7 @@
             @endauth
 
             <div id="msg_panel" class="bg-info">
-                <span id="global_msg" class="text-white fw-bold"></span>
+                <span id="global_msg" class="text-dark fw-bold"></span>
             </div>
         </main>
     </div>
@@ -49,6 +49,8 @@
         </div>
        
     </div>
+
+    @stack('scripts')
 </body>
 
 </html>

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Transaction;
 use App\Models\Product_restockrequest;
 
@@ -24,6 +25,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'status'
     ];
 
     /**
@@ -59,5 +62,12 @@ class User extends Authenticatable
      */
     public function product_restockrequest():HasMany{
         return $this->hasMany(Product_restockrequest::class);
+    }
+
+    /**
+     * A user has one drawer
+     */
+    public function drawer():HasOne{
+        return $this->hasOne(Drawer::class);
     }
 }
