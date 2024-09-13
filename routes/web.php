@@ -72,7 +72,9 @@ Route::middleware('auth')->group(function(){
    Route::post('settings/store_update',[SettingsController::class,'store_update'])->name('settings.store_update');
    Route::post('setting/disc_delete/{code}',[SettingsController::class,'delete'])->name('settings.delete');
    Route::post('settings/update_discount',[SettingsController::class,'update_discount'])->name('settings.update_discount');
-
-  
-  
+   Route::get('settings/users',[SettingsController::class,'users'])->name('settings.users');
+   Route::post('settings/new_user',[SettingsController::class,'new_user'])->name('settings.new_user');
+   Route::post('settings/update_pword',[SettingsController::class,'update_password'])->name('settings.update_pword');
+   
+   
 });

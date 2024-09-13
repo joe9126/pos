@@ -42,8 +42,9 @@
                             <select name="category" id="category" class="form-select prod-select" required
                                 data-parsley-required-message="Category is required.">
                                 <option value="" selected="selected">Select Category *</option>
+                                <option selected="selected" value="{{$prod_data[0]->category_id}}">{{$prod_data[0]->category->title}}</option>
                                 @foreach ($categories as $category)
-                                    <option selected="selected" value="{{ $category->id }}">{{ $category->title }}</option>
+                                    <option  value="{{ $category->id }}">{{ $category->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -66,7 +67,13 @@
                          <div class="input-group mb-3 ml-3" style="margin-right:3px !important;">
                              <span class="input-group-text text-primary">Status</span>
                              <select name="status" id="status" class="form-select prod-select">
-                                 <option value="1" selected="selected">Select Status</option>
+                                 <option value="{{$prod_data[0]->status}}" selected="selected">
+                                    @if ($prod_data[0]->status==1)
+                                        Active
+                                    @else
+                                        Locked
+                                    @endif
+                                </option>
                                  <option value="1">Active</option>
                                  <option value="0">Locked</option>
                              </select>
@@ -77,7 +84,7 @@
                          <div class="input-group mb-3 ml-3">
                              <span class="input-group-text text-primary">Rating</span>
                              <select name="rating" id="rating" class="form-select prod-select">
-                                 <option value="0" selected="selected">Select Rating</option>
+                                 <option value="{{$prod_data[0]->rating}}" selected="selected">{{$prod_data[0]->rating}} Star</option>
                                  <option value="1">1 Star</option>
                                  <option value="2">2 Star</option>
                                  <option value="3">3 Star</option>
@@ -92,7 +99,7 @@
                         <div class="input-group mb-3 ml-3">
                             <span class="input-group-text ">Tax <span class="text-danger"> *</span></span>
                             <select name="tax_id" id="tax_id" class="form-select prod-select" required>
-                                <option value="" selected="selected">Select Tax</option>
+                                <option value="{{$prod_data[0]->tax_id}}" selected="selected">{{$prod_data[0]->tax->title}}</option>
                                 @foreach ($taxgroups as $tax)
                                 <option value="{{$tax->id}}">{{$tax->title}}</option>
                                 @endforeach

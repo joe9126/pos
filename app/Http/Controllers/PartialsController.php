@@ -116,8 +116,9 @@ class PartialsController extends Controller
     //get restock request items
     public function restock_requests_items($id){
         $restock_req_items = Restockrequest::where('id',$id)->with('product')->get();
-        //var_dump($restock_req_items);
-        return view('partials.restockrequestitems', compact(['restock_req_items']));
+            $stock_limit = Settings::value('low_stock_level');
+
+        return view('partials.restockrequestitems', compact(['restock_req_items','stock_limit']));
     }
 
     //get cashier sales 

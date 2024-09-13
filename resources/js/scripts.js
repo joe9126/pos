@@ -74,6 +74,7 @@ $(".modal-content").on('submit', '#new_product_form', function (event) {
 $(".prod_item_link").on("click", function (event) {
     event.preventDefault();
 });
+
 $("#products_list").on('click', '.edit-pen', function (event) {
     event.preventDefault();
     var str = $(this).closest("a").attr('href').split("/");
@@ -240,13 +241,21 @@ $('#send_requestbtn').on("click",function(){
             data:formData,
             dataType:"json",
             beforeSend:function(){
-                $("#global_msg").text("Sending request. Please wait ...");
+                $(".global_msg").text("Sending request. Please wait ...");
                 $("#msg_panel").show();
             },
             success:(data)=>{
-                console.log(data);
-                $("#global_msg").text(data.message);
-                $("#msg_panel").show().delay(3000).hide(1);
+                $("#msg_panel").hide();
+                 $(".global_msg").text(data.message);
+            if(data.status=="success"){
+             $("#msg_success").show().delay(3000).hide(1);
+           
+            setTimeout(function(){
+                location.reload();
+            },3000);
+           }else{
+            $("#msg_error").show().delay(3000).hide(1);
+           }
             }
         });
 
@@ -265,14 +274,14 @@ $(function () {
             type: 'get',
             url: link,
             success: function (data) {
-                // console.log(data);
-                $("#msg_panel").show().delay(3000).hide(1);
+              
                 if (data.quantity < 1) {
-                    $("#global_msg").text("Units not enough.");
+                    $("#msg_error").show().delay(3000).hide(1);
+                    $(".global_msg").text("Product quantity is not enough.");
 
                 } else {
-                   
-                    $("#global_msg").text("Item added.");
+                    $("#msg_success").show().delay(3000).hide(1);
+                    $(".global_msg").text("Item added to list");
 
                     let item =
                         "<tr>" +
@@ -398,11 +407,11 @@ $("table#pos_table #items_tbody").on('click', ".addunit", function (event) {
                 var qty = parseInt(units) + 1;
                 $(this).closest('td').next('td').html(qty);
                 getSalestotal();
+                $("#msg_success").show().delay(3000).hide(1);
+                $(".global_msg").text("Quantity added.");
             } else {
-                $("#statusalert").addClass("alert-danger");
-                $("#statusalert").removeClass("alert-success");
-                $("#msg").text("Units not enough.");
-                $("#statusalert").show().fadeOut(4000);;
+                $("#msg_error").show().delay(3000).hide(1);
+                $(".global_msg").text("Product quantity is not enough.");
             }
 
         }
@@ -417,8 +426,15 @@ $("table#pos_table #items_tbody").on('click', ".addunit", function (event) {
 $("#items_tbody").on('click', ".subtractunit", function (event) {
     event.preventDefault();
     var units = $(this).closest('td').prev('td').html();
-    if (parseInt(units) <= 1) { }
-    else { $(this).closest('td').prev('td').html(parseInt(units) - 1); }
+    if (parseInt(units) <= 1) { 
+        $("#msg_error").show().delay(3000).hide(1);
+        $(".global_msg").text("Minimum of 1 unit is required.");
+    }
+    else { 
+        $(this).closest('td').prev('td').html(parseInt(units) - 1); 
+        $("#msg_success").show().delay(3000).hide(1);
+        $(".global_msg").text("1 unit removed.");
+    }
     getSalestotal();
 });
 
@@ -472,8 +488,8 @@ $("#transactbtn").on("click", function () {
     var totalsale = document.getElementById("pos_grandtotal").innerHTML;
 
     if (totalsale < 1) {
-        $("#statusalert").show().fadeOut(4000);
-        $("#msg").text("Please add items to cart!");
+        $("#msg_error").show().delay(3000).hide(1);
+        $(".global_msg").text("Please add items to cart");
     } else {
 
         $("#pos_view").hide().slideUp();
@@ -557,40 +573,32 @@ function completeTransaction(payment, payment_mode, transaction_type) {
         url: "pos/transact",
         dataType: "json",
         beforeSend: function () {
-            $(".alert").removeClass("alert-danger");
-            $(".alert").addClass("alert-primary");
-            $(".msg").text("Transacting. Please wait...");
-            $(".alert").css("display", "block");
-            $(".spinner-border").css("display", "block");
-
+            $("#msg_panel").show();
+            $(".global_msg").text("Transacting. Please wait...");
+           
         },
         success: (data) => {
-            // console.log(data);
-            if (data.status = 'success') {
-                $(".alert").removeClass("alert-danger");
-                $(".alert").addClass("alert-success");
+            $("#msg_panel").hide();
+            $(".global_msg").text(data.message);
 
-                transaction_type == "hold" ? $("#msg").text("Transaction kept on hold.") : $(".msg").text(data.message);
-                $(".alert").show();
-                $(".spinner-border").css("display", "none");
-                $("#payment").val(''); $("#payment").focus();
-                $("#cashtotal").text('0.00');
-                $("#cashbalance").text('0.00');
-                $("#executebtn").prop('disabled', true);
+            if(data.status=="success"){
+             $("#msg_success").show().delay(3000).hide(1);
+             transaction_type == "hold" ? $(".global_msg").text("Transaction kept on hold.") : $(".global_msg").text(data.message);
+             $("#payment").val(''); $("#payment").focus();
+             $("#cashtotal").text('0.00');
+             $("#cashbalance").text('0.00');
+             $("#executebtn").prop('disabled', true);
 
-                if (transaction_type == "cash" || transaction_type == "mpesa") {
-                    printReceipt(data.transaction_id);
-                }
-
-
-                setTimeout(function () {
-                    $(".alert").slideUp('slow').fadeOut(function () {
-                        $("#pos_table tbody tr").remove();
-                        $('.posactivitybtn').prop('disabled', true);
-
-                    });
-                }, 4000);
-            }
+             if (transaction_type == "cash" || transaction_type == "mpesa") {
+                 printReceipt(data.transaction_id);
+             }
+            setTimeout(function(){
+                $("#pos_table tbody tr").remove();
+                $('.posactivitybtn').prop('disabled', true);
+            },3000);
+           }else{
+            $("#msg_error").show().delay(3000).hide(1);
+           }
         }
     });
 }
@@ -708,16 +716,16 @@ $("#sku").on("change paste keyup", function () {
             if (data.length != 0) {
                 console.log(data);
                 $("#title").val(data[0].title);
-                $("select#category option:selected").val(data[0].category_id);
-                $("select#category option:selected").text(data[0].category.title);
+                $("select#category").val(data[0].category_id).change();
+               
                 $("#unitprice").val(data[0].unit_price);
                 $("#discount").val(data[0].discount);
                 $("select#tax_id option:selected").val(data[0].tax_id);
                 $("select#tax_id option:selected").text(data[0].tax.title);
                 $("#stock_notice").val(data[0].stock_notice);
 
-                $("select#status option:selected").val(data[0].status);
-                $("select#status option:selected").text(data[0].status ? "Active" : "Locked");
+                $("select#status").val(data[0].status).change();
+                $("select#status").text(data[0].status ? "Active" : "Locked");
 
                 $("select#rating option:selected").val(data[0].rating);
                 $("select#rating option:selected").text(data[0].rating + " Star");
@@ -754,26 +762,25 @@ $(document).ready(function () {
                 dataType: "json",
                 contentType: false,
                 processData: false,
-                beforeSend: function () { },
+                beforeSend: function () { 
+                    $("#msg_panel").hide();
+                    $(".global_msg").text("Updating...");
+                },
                 success: function (data) {
 
-                    if (data.status == "success") {
-                        $("#statusalert").removeClass("alert-danger");
-                        $("#statusalert").addClass("alert-success");
-                        $('#product_form')[0].reset();
-                        $('#product_form').parsley().reset();
-                        $("#productimage").css('background-image', 'url(public_uploads/box.png)');
-                        setTimeout(function(){
-                            location.reload();
-                        },1000);
-                    } else {
-                        $("#statusalert").addClass("alert-danger");
-                        $("#statusalert").removeClass("alert-success");
-                    }
-                    $("#msg").text(data.message);
-                    $("#statusalert").show().fadeOut(4000);
-                   
-
+                    $("#msg_panel").hide();
+                    $(".global_msg").text(data.message);
+                    if(data.status=="success"){
+                     $("#msg_success").show().delay(3000).hide(1);
+                     $('#product_form')[0].reset();
+                     $('#product_form').parsley().reset();
+                     $("#productimage").css('background-image', 'url(public_uploads/box.png)');
+                    setTimeout(function(){
+                        location.reload();
+                    },3000);
+                   }else{
+                    $("#msg_error").show().delay(3000).hide(1);
+                   }
                 }
             });
         }
@@ -859,10 +866,25 @@ $("#held_trans_data").on('click', '#complete-trans-btn', function () {
         url: "sales/finalize/" + trans_id,
         method: "post",
         dataType: "json",
+        beforeSend:function(){
+            $("#msg_panel").show();
+            $(".global_msg").text("Completing transaction...");
+        },
         success: (data) => {
             printReceipt(trans_id);
-            $(".msg").text(data.message);
-            $(".alert").show();
+            
+            $("#msg_panel").hide();
+            $(".global_msg").text(data.message);
+            if(data.status=="success"){
+             $("#msg_success").show().delay(3000).hide(1);
+           
+            setTimeout(function(){
+                location.reload();
+            },3000);
+           }else{
+            $("#msg_error").show().delay(3000).hide(1);
+           }
+
         }
     });
 });
@@ -877,13 +899,26 @@ $("#held_trans_data").on('click', '#delete-trans-btn', function () {
         url: "sales/delete/" + trans_id,
         method: "post",
         dataType: "json",
+        beforeSend:function(){
+            $("#msg_panel").show();
+            $(".global_msg").text("Deleting...");
+        },
         success: (data) => {
             printReceipt(trans_id);
-            $(".msg").text(data.message);
-            $(".alert").show().fadeOut(4000);
-            setTimeout(function () {
+
+            $("#msg_panel").hide();
+            $(".global_msg").text(data.message);
+            if(data.status=="success"){
+             $("#msg_success").show().delay(3000).hide(1);
+           
+            setTimeout(function(){
                 location.reload();
-            }, 4000);
+            },3000);
+           }else{
+            $("#msg_error").show().delay(3000).hide(1);
+           }
+
+          
         }
     });
 });
@@ -968,17 +1003,23 @@ $("#stock_limit_btn").on("click",function(event){
         data: formdata,
         dataType: "json",
         beforeSend:function(){
-            $("#global_msg").text("Submitting...");
+            $(".global_msg").text("Submitting...");
             $("#msg_panel").show();
            
         },
         success:(data)=>{
-           // console.log("status "+data.status);
+            $("#msg_panel").hide();
+            $(".global_msg").text(data.message);
             if(data.status=="success"){
-                $("#global_msg").text(data.message);
-                $("#msg_panel").show().delay(3000).hide(1);
-               $("#product_settings_form")[0].reset();
-            }
+             $("#msg_success").show().delay(3000).hide(1);
+             $("#product_settings_form")[0].reset();
+            setTimeout(function(){
+                location.reload();
+            },3000);
+           }else{
+            $("#msg_error").show().delay(3000).hide(1);
+           }
+           
         }
     });
 });
@@ -1019,14 +1060,22 @@ $("#drawer_form").on("submit",function(event){
         dataType:"json",
         beforeSend:function(){
             $("#msg_panel").show();
-            $("#global_msg").text("Closing drawer. Please wait...");
+            $(".global_msg").text("Closing drawer. Please wait...");
         },
         processData:false,
         contentType:false,
         success: (data)=>{
             if(data.status == "success"){
-                $("#msg_panel").delay(3000).hide(1);
-                $("#global_msg").text("Drawer closed successfully.");
+                $("#msg_panel").hide();
+                $(".global_msg").text(data.message);
+                if(data.status=="success"){
+                 $("#msg_success").show().delay(3000).hide(1);
+                setTimeout(function(){
+                    location.reload();
+                },3000);
+               }else{
+                $("#msg_error").show().delay(3000).hide(1);
+               }
             }
         }
 
@@ -1108,18 +1157,19 @@ $("#discounts_form").on("submit",function(event){
             type: 'POST',
             beforeSend:function(){
                 $("#msg_panel").show();
-                $("#global_msg").text("Saving. Please wait...");
+                $(".global_msg").text("Saving. Please wait...");
             },
             success: function(data){
-                console.log(data);
-                $("#msg_panel").show().delay(3000).hide(1);
-                $("#global_msg").text(data.message);
+                $("#msg_panel").hide();
+                $(".global_msg").text(data.message);
                 if(data.status=="success"){
-                    $("#discounts_form")[0].reset();
-                    setTimeout(function(){
-                        location.reload();
-                    },1000);
-                }
+                 $("#msg_success").show().delay(3000).hide(1);
+                setTimeout(function(){
+                    location.reload();
+                },3000);
+               }else{
+                $("#msg_error").show().delay(3000).hide(1);
+               }
             }
         });
     }
@@ -1170,19 +1220,20 @@ $("#deletediscountbtn").on("click",function(){
         dataType:"json",
         beforeSend:function(){
             $("#msg_panel").show();
-            $("#global_msg").text("Deleting. Please wait...");
+            $(".global_msg").text("Deleting. Please wait...");
         },
         success:(data)=>{
-            if(data.status=="success"){
-                $("#msg_panel").css({"background-color":"#198754","color":"#fff"});
-                $("#global_msg").text(data.message);
-                $("#msg_panel").delay(3000).hide(1);
+                $("#msg_panel").hide();
+                $(".global_msg").text(data.message);
+
+                if(data.status=="success"){
+                 $("#msg_success").show().delay(3000).hide(1);
                 setTimeout(function(){
                     location.reload();
-                },1000);
-              
-     
-            }
+                },3000);
+               }else{
+                $("#msg_error").show().delay(3000).hide(1);
+               }
         }
     });
 });
@@ -1214,22 +1265,42 @@ $("#store_info_form").on("submit", function(event){
             contentType:false,
             beforeSend:function(){
                 $("#msg_panel").show();
-                $("#global_msg").text("Updating. Please wait...");
+                $(".global_msg").text("Updating. Please wait...");
             },
             success:(data)=>{
-                $("#global_msg").text(data.message);
-                $("#msg_panel").delay(3000).hide(1);
+                $("#msg_panel").hide();
+                $(".global_msg").text(data.message);
                 if(data.status=="success"){
-                    setTimeout(function(){
-                        location.reload();
-                    },3000);
-                }
-               
-              
+                 $("#msg_success").show().delay(3000).hide(1);
+                setTimeout(function(){
+                    location.reload();
+                },3000);
+               }else{
+                $("#msg_error").show().delay(3000).hide(1);
+               }
             }
 
        });
     }
+});
+
+/**
+ * Toggle users list card view
+ */
+$(".list_view").on('click',function(){
+    $("#users_list").show('slow');
+    $("#card-view").hide('slow');
+});
+
+$(".card_view").on('click',function(){
+    $("#users_list").hide('slow');
+    $("#card-view").show('slow');
+});
+
+//new user form display
+$(".new_user").on("click",function(){
+    $(".manage_user").show('slow');
+    $("#user_form")[0].reset();
 });
 
 /**
@@ -1246,6 +1317,96 @@ $(".users_list").on("mouseenter",'.card-template', function(){
  */
 $(".users_list").on("click",'.card-template', function(){
     $(".manage_user").show('slow');
+    var email = $(this).find(".user_email").text();
+    $("#useremail").val(email); 
+
+    var name = $(this).find(".user_name").text();
+    $("#name").val(name);
+
+    var role = $(this).find(".user_role").text();
+    $("#role").val(role).change();
+});
+
+/**
+ * Submit user form
+ */
+$("#user_form").on("submit",function(event){
+    event.preventDefault();
+    if($("#user_form").parsley().isValid()){
+    var formdata = new FormData(this);
+    $.ajax({
+        url:"settings/new_user",
+        method:"post",
+        data:formdata,
+        processData:false,
+        contentType:false,
+        dataType:"json",
+        beforeSend: function () { 
+            $("#msg_panel").show();
+            $(".global_msg").text("Submitting. Please wait...");
+        },
+        success:(data)=>{
+            $("#msg_panel").hide();
+            $(".global_msg").text(data.message);
+            if(data.status=="success"){
+                $("#msg_success").show().delay(3000).hide(1);
+                setTimeout(function(){
+                    location.reload();
+                },3000);
+            }else{
+                $("#msg_error").show().delay(3000).hide(1);
+            }
+        }
+    });
+}
+});
+
+/**
+ * Change password
+ */
+$("#change_password_form").on("submit",function(event){
+    event.preventDefault();
+
+    if($("#change_password_form").parsley().isValid()){
+        var new_pword = $("#new_password").val();
+        var confirm_pword = $("#confirm_password").val();
+
+        if(new_pword !== confirm_pword ){
+            $("#global_msg").text("Passwords do not match");
+            $("#msg_panel").show();
+            $("#msg_panel").delay(3000).hide(1);
+           
+            
+        }else{
+            var formdata = new FormData(this);
+            $.ajax({
+                url:"settings/update_pword",
+                method:"post",
+                data:formdata,
+                dataType:"json",
+                processData:false,
+                contentType:false,
+                beforeSend:function(){
+                    $("#msg_panel").show();
+                    $(".global_msg").text("Updating...");
+                },
+                success:(data)=>{
+                    $("#msg_panel").hide();
+                    $(".global_msg").text(data.message);
+                    if(data.status=="success"){
+                        $("#msg_success").show().delay(3000).hide(1);
+                        setTimeout(function(){
+                            $("#change_password_form")[0].reset();
+                        },3000);
+                    }else{
+                        $("#msg_error").show().delay(3000).hide(1);
+                    }
+                }
+
+            });
+        }
+
+    }
 });
 
 /**

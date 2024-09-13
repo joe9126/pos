@@ -5,9 +5,9 @@
     <td>By {{$req->user->name}}</td>
     <td>
         @if ($req->status == true)
-        <i class="fa-solid fa-circle text-success"></i> Complete
+        <i class="fa-solid fa-circle-check text-success"></i> Complete
         @else
-        <i class="fa-solid fa-circle text-danger"></i> Pending
+        <i class="fa-solid fa-circle-xmark text-danger"></i> Pending
         @endif      
     </td>
 </tr>

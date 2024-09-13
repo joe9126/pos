@@ -28,6 +28,7 @@
                                 </div>
                             </div>
                             <div id="sales_history_view">
+                                @if ($transactions->count()>0)
                                 <table class="table table-striped mt-3" id="transactions_table">
                                     <tbody>
                                         @foreach ($transactions as $transaction)
@@ -40,6 +41,10 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                @else
+                                <h6 class="text-danger text-center">No transactions found</h6> 
+                                @endif
+                                
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -67,16 +72,21 @@
 
                         <table class="table table-striped mt-3" id="held_transactions_table">
                             <tbody>
+                                @if ($held_transactions->count()>0)
                                 @foreach ($held_transactions as $held_transaction)
-                                    <tr>
-                                        <td>#{{ $held_transaction->id }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($held_transaction->created_at)->format('d/m/Y g:i A') }}
-                                        </td>
-                                        <td>{{$currency}}{{ number_format($held_transaction->grandtotal, 2) }}</td>
-                                    </tr>
-                                @endforeach
+                                <tr>
+                                    <td>#{{ $held_transaction->id }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($held_transaction->created_at)->format('d/m/Y g:i A') }}
+                                    </td>
+                                    <td>{{$currency}}{{ number_format($held_transaction->grandtotal, 2) }}</td>
+                                </tr>
+                            @endforeach
+                            @endif                                
                             </tbody>
                         </table>
+                        @if ($held_transactions->count()<1)
+                         <h6 class="text-danger text-center">No pending transactions</h6> 
+                         @endif
                     </div>
                     <div class="col-md-8">
                         <div class="row" id="held_trans_data"></div>

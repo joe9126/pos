@@ -12,29 +12,30 @@
         <div> 
             <a href="{{ url('home') }}" class="nav_logo"> 
                 <i class='bx bx-layer nav_logo-icon'></i> 
-                <span class="nav_logo-name"> {{ config('app.name', 'POS') }}</span> 
+                <span class="nav_logo-name fw-bold">PrimePOS</span> 
             </a>
             <div class="nav_list" id="nav_list"> 
-                <a href="{{ url('dashboard') }}" class="nav_link"> 
-                    <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span> 
+                <a href="{{ url('home') }}" class="nav_link"> 
+                    <i class="fa-solid fa-gauge-high nav_icon"></i> <span class="nav_name">Dashboard</span> 
                 </a> 
                 <a href="{{ url('pos') }}" class="nav_link"> 
-                    <i class='bx bx-calculator nav_icon'></i> <span class="nav_name">POS</span> 
+                    <i class="fa-solid fa-cash-register nav_icon"></i> <span class="nav_name">POS</span> 
                 </a> 
                 <a href="{{ url('products') }}" class="nav_link">
-                    <i class='bx bx-package nav_icon'></i> <span class="nav_name">Products</span>
+                    <i class="fa-solid fa-boxes-stacked nav_icon"></i> <span class="nav_name">Products</span>
                  </a>
 
                  <a href="{{ url('sales') }}" class="nav_link"> 
                     <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Sales</span>
                  </a> 
+                 <a href="{{ url('suppliers') }}" class="nav_link"> 
+                    <i class="fa-solid fa-users-between-lines nav_icon"></i><span class="nav_name">Suppliers</span>
+                </a>
                 
                 <a href="{{ url('cashier') }}" class="nav_link"> 
                     <i class='bx bx-user nav_icon'></i> <span class="nav_name">Cashier</span> 
                 </a>
-                <a href="#" class="nav_link"> 
-                    <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span>
-                </a>
+               
                  <a href="{{ url('settings') }}" class="nav_link"> 
                     <i class='bx bx-cog nav_icon'></i> <span class="nav_name">Settings</span>
                  </a>

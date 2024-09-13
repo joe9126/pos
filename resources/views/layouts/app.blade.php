@@ -34,8 +34,14 @@
                 @include('layouts.sidenav')
             @endauth
 
-            <div id="msg_panel" class="bg-info">
-                <span id="global_msg" class="text-dark fw-bold"></span>
+            <div id="msg_panel" class="message_panel bg-info">
+                <span class="global_msg" class="text-dark fw-bold"></span>
+            </div>
+            <div id="msg_success" class="message_panel  bg-success text-white">
+                <span class="global_msg" class="text-white fw-bold"></span>
+            </div>
+            <div id="msg_error" class="message_panel  bg-danger text-white">
+                <span class="global_msg" class="text-white fw-bold"></span>
             </div>
         </main>
     </div>

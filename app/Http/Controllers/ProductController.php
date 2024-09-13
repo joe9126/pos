@@ -86,7 +86,6 @@ class ProductController extends Controller
     }
 
     //U = UPDATE update product quantity
-
     public function update(Request $request){
         $data = $request->all();
        // var_dump($data['stock_quantity']);
@@ -105,6 +104,27 @@ class ProductController extends Controller
             $supp_product->comment = $data['comment'];
             $supp_product->user_id = Auth::user()->id;
             $status = $supp_product->save();
+
+            $stock_limit = Settings::value('low_stock_level');
+            if($product['quantity'] >= $stock_limit){
+                Product_restockrequest::where('product_id',$product['id'])->update(['status'=>1]);
+                $request_id = Product_restockrequest::where('product_id',$product['id'])->value('restockrequest_id');
+                // Get the product request by ID
+                $productRequest = Restockrequest::findOrFail($request_id);
+
+                // Check if all items for the product request have a true status
+                    $allItemsTrue = $productRequest->product_restockrequest()->where('status', true)->count() 
+                            == $productRequest->product_restockrequest()->count();
+
+                    // Update the request_status column if all items have a true status
+                    if ($allItemsTrue) {
+                         $productRequest->update(['status' => true]);
+                    } else {
+                         $productRequest->update(['status' => false]);
+                        }
+
+            }
+          
             
         }
         if(!$status){

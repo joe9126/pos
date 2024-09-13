@@ -47,7 +47,7 @@
     </style>
 </head>
 
-<body style="background-color: #afafb4; display:flex; justify-content:center; align-items:center;">
+<body style="background-color: #cbdfdd; display:flex; justify-content:center; align-items:center;">
     <div
         style=" width: 500px; height: auto; min-height: 250px; border-radius: 5px; background-color: #fff; padding: 30px 30px; margin: auto; margin-top:30px; margin-bottom: 30px;
              justify-content: flex-start;  align-items: center;">
@@ -56,7 +56,7 @@
             items in our inventory:</p>
 
         <table style=" width: 100%; border-collapse: collapse; margin: 5px 5px;">
-            <thead style="background-color: #a4a4d0;  padding: 8px; border-bottom: 1px solid #ddd;">
+            <thead style="background-color: #cbdfdd;  padding: 8px; border-bottom: 1px solid #ddd;">
                 <tr style="padding: 8px; border-bottom: 1px solid #ddd;">
                     <th>No</th>
                     <th>SKU</th>

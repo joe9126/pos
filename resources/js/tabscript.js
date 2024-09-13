@@ -41,7 +41,9 @@ $(document).ready(function () {
         break;
       case "sales_history":
         getCashierhistory();
-
+        break;
+      case "user_accounts":
+        getUsers();
     }
   });
 
@@ -165,3 +167,19 @@ function getCashierhistory() {
 function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, ',');
 } 
+
+
+/**
+ * Fetch users for user datatable
+ */
+
+function getUsers(){
+  $.ajax({
+    url: "settings/users",
+    type: "GET",
+    dataType: "html",
+    success:function(data){
+      $('#users_list').html(data);
+    }
+  });
+}

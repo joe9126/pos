@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Settings;
 use App\Models\Discount;
@@ -97,5 +98,71 @@ class SettingsController extends Controller
         }
      
         return response()->json(['status'=>'success','message'=>'Outlet details updated.'],200);
+    }
+
+    /**
+     * Fetch users for the datatable display
+     */
+    public function users(){
+        $users = User::all();
+
+        return view('partials.userslist', compact(['users']));
+    }
+
+    /**
+     * create or update user
+     */
+    public function new_user(Request $request){
+        $status = User::updateOrCreate(
+            ['email'=>$request['useremail']],
+            [   
+               
+                'name'=>$request['name'],
+                'password'=>Hash::make($request['password']),
+                'role'=>$request['role'],
+                'status'=>$request['status']
+            ]
+        );
+        if(!$status){
+            return response()->json(['status'=>'error','message'=>'An error occured, details not saved.'],500);
+        }
+        return response()->json(['status'=>'success','message'=>'User details saved.'],200);
+    }
+
+    /**
+     * Change password
+     */
+    public function update_password(Request $request){
+        $user_pword  = User::find(Auth::user()->id)->value('password');
+       
+        $old_pword = $request['old_password'];
+        $new_pword  = $request['new_password'];
+
+            $message="An error occured. Try again."; 
+            $status_code = 500; 
+            $status = "error";  
+             $updatestatus="";
+              
+        if( Hash::check($old_pword, $user_pword)){
+            if(Hash::check($new_pword, $user_pword)){
+                $message="New password cannot be same as old password."; 
+                $status_code = 200; 
+                $status = "error";          
+            }else{
+                $updatestatus =  User::where('id',Auth::user()->id)->update(['password'=>Hash::make($new_pword)]);
+            }
+        }
+        else{
+            $message="Old password is incorrect."; 
+            $status_code = 200; 
+            $status = "error";
+        }
+
+        if($updatestatus){
+            $message="Password changed successfully."; 
+            $status_code = 200; 
+            $status = "success";   
+        }
+        return response()->json(['status'=>$status,'message'=>$message],$status_code);
     }
 }

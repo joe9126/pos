@@ -128,8 +128,10 @@
                 </div>
 
             </div>
-            <div class="col-md-6">
-                <div id="requested_items"></div>
+            <div class="col-md-7">
+                <div id="requested_items">
+                    <!---Data loaded dynamically via partials.restockrequestitems.blade  --->
+                </div>
             </div>
         </div>
    
